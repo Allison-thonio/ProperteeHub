@@ -19,7 +19,7 @@ export default function AppNavigator() {
             initialRouteName="RoleSelection"
             screenOptions={{
                 headerShown: true,
-                headerBackTitleVisible: false,
+                headerBackTitle: '',
                 headerTintColor: '#1a1a1a',
             }}
         >

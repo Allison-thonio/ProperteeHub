@@ -2,7 +2,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../types/navigation';
+import { RootStackParamList } from '../types/navigation';
 import { StatusBar } from 'expo-status-bar';
 
 type Props = {
