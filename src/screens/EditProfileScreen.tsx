@@ -14,10 +14,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 import { launchImageLibrary } from 'react-native-image-picker';
+import { useTheme } from '../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'EditProfile'>;
 
 export default function EditProfileScreen({ route, navigation }: Props) {
+    const { colors, isDark } = useTheme();
     const { currentName, currentImage, currentFirm, userRole } = route.params;
 
     const [name, setName] = useState(currentName);
@@ -42,12 +45,13 @@ export default function EditProfileScreen({ route, navigation }: Props) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar style="auto" />
+            <View style={[styles.header, { borderBottomColor: colors.border }]}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backBtn}>
-                    <Text style={styles.backText}>CANCEL</Text>
+                    <Text style={[styles.backText, { color: colors.textSecondary }]}>CANCEL</Text>
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>EDIT PROFILE</Text>
+                <Text style={[styles.headerTitle, { color: colors.text }]}>EDIT PROFILE</Text>
                 <TouchableOpacity onPress={handleSave} style={styles.saveBtn}>
                     <Text style={styles.saveText}>SAVE</Text>
                 </TouchableOpacity>
@@ -56,8 +60,8 @@ export default function EditProfileScreen({ route, navigation }: Props) {
             <ScrollView contentContainerStyle={styles.content}>
                 <View style={styles.imageContainer}>
                     <TouchableOpacity onPress={handlePickImage} style={styles.imageWrapper}>
-                        <Image source={{ uri: imageUri }} style={styles.profilePic} />
-                        <View style={styles.cameraIconContainer}>
+                        <Image source={{ uri: imageUri }} style={[styles.profilePic, { borderColor: colors.text, backgroundColor: colors.surface }]} />
+                        <View style={[styles.cameraIconContainer, { borderColor: colors.background }]}>
                             <View style={styles.cameraIcon} />
                         </View>
                     </TouchableOpacity>
@@ -68,31 +72,31 @@ export default function EditProfileScreen({ route, navigation }: Props) {
 
                 <View style={styles.form}>
                     <View style={styles.inputGroup}>
-                        <Text style={styles.label}>FULL NAME</Text>
+                        <Text style={[styles.label, { color: colors.text }]}>FULL NAME</Text>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { borderBottomColor: colors.border, color: colors.text }]}
                             value={name}
                             onChangeText={setName}
                             placeholder="Enter your name"
-                            placeholderTextColor="#888"
+                            placeholderTextColor={colors.textSecondary}
                         />
                     </View>
 
                     {userRole === 'seller' && (
                         <View style={styles.inputGroup}>
-                            <Text style={styles.label}>FIRM / BUSINESS NAME</Text>
+                            <Text style={[styles.label, { color: colors.text }]}>FIRM / BUSINESS NAME</Text>
                             <TextInput
-                                style={styles.input}
+                                style={[styles.input, { borderBottomColor: colors.border, color: colors.text }]}
                                 value={firm}
                                 onChangeText={setFirm}
                                 placeholder="Enter firm name"
-                                placeholderTextColor="#888"
+                                placeholderTextColor={colors.textSecondary}
                             />
                         </View>
                     )}
 
-                    <View style={styles.infoBox}>
-                        <Text style={styles.infoText}>
+                    <View style={[styles.infoBox, { backgroundColor: colors.surface }]}>
+                        <Text style={[styles.infoText, { color: colors.textSecondary }]}>
                             Your profile information is visible to other users on ProperteeHub to ensure transparency and trust.
                         </Text>
                     </View>

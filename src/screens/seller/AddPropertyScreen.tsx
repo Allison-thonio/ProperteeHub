@@ -10,8 +10,11 @@ import {
     Alert,
     ActivityIndicator,
     Image,
-    Dimensions
+    Dimensions,
+    StatusBar
 } from 'react-native';
+import { useTheme } from '../../context/ThemeContext';
+import { StatusBar as ExpoStatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
@@ -25,6 +28,7 @@ const PROPERTY_TYPES = ['Land', 'House', 'Apartment', 'Commercial', 'Shortlet'];
 const { width } = Dimensions.get('window');
 
 export default function AddPropertyScreen({ navigation }: Props) {
+    const { colors, isDark } = useTheme();
     const [loading, setLoading] = useState(false);
     const [images, setImages] = useState<string[]>([]);
     const [propertyDetails, setPropertyDetails] = useState({
@@ -73,7 +77,8 @@ export default function AddPropertyScreen({ navigation }: Props) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <ExpoStatusBar style="auto" />
             <View style={styles.headerBar}>
                 <Text style={styles.headerTitle}>New Listing</Text>
                 <Text style={styles.headerStep}>Step 1 of 2</Text>

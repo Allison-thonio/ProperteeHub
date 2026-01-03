@@ -11,18 +11,22 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
+import { useTheme } from '../../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'BuyerProfile'>;
 
 export default function BuyerProfileScreen({ navigation }: Props) {
+    const { colors, isDark } = useTheme();
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar style="auto" />
             <ScrollView contentContainerStyle={styles.scrollContent}>
-                <View style={styles.header}>
+                <View style={[styles.header, { borderBottomColor: colors.text }]}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                        <Text style={styles.backLabel}>BACK</Text>
+                        <Text style={[styles.backLabel, { color: colors.text }]}>BACK</Text>
                     </TouchableOpacity>
-                    <Text style={styles.headerTitle}>MY PROFILE</Text>
+                    <Text style={[styles.headerTitle, { color: colors.text }]}>MY PROFILE</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('EditProfile', {
                         currentName: 'Alice Johnson',
                         currentImage: 'https://ui-avatars.com/api/?name=Alice+Buyer&background=000&color=fff',
@@ -34,56 +38,56 @@ export default function BuyerProfileScreen({ navigation }: Props) {
 
                 <View style={styles.profileSection}>
                     <Image
-                        style={styles.profilePic}
+                        style={[styles.profilePic, { borderColor: colors.text }]}
                         source={{ uri: 'https://ui-avatars.com/api/?name=Alice+Buyer&background=000&color=fff' }}
                     />
-                    <Text style={styles.name}>Alice Johnson</Text>
-                    <Text style={styles.userRole}>Premium Buyer</Text>
+                    <Text style={[styles.name, { color: colors.text }]}>Alice Johnson</Text>
+                    <Text style={[styles.userRole, { color: colors.textSecondary }]}>Premium Buyer</Text>
                     <View style={styles.goldBadge}>
                         <Text style={styles.goldBadgeText}>GOLD MEMBER</Text>
                     </View>
                 </View>
 
-                <View style={styles.statsContainer}>
+                <View style={[styles.statsContainer, { borderTopColor: colors.border, borderBottomColor: colors.border }]}>
                     <View style={styles.statBox}>
-                        <Text style={styles.statValue}>5</Text>
-                        <Text style={styles.statLabel}>SAVED</Text>
+                        <Text style={[styles.statValue, { color: colors.text }]}>5</Text>
+                        <Text style={[styles.statLabel, { color: colors.textSecondary }]}>SAVED</Text>
                     </View>
                     <View style={styles.statBox}>
-                        <Text style={styles.statValue}>2</Text>
-                        <Text style={styles.statLabel}>TOURS</Text>
+                        <Text style={[styles.statValue, { color: colors.text }]}>2</Text>
+                        <Text style={[styles.statLabel, { color: colors.textSecondary }]}>TOURS</Text>
                     </View>
                     <View style={styles.statBox}>
-                        <Text style={styles.statValue}>8</Text>
-                        <Text style={styles.statLabel}>CHATS</Text>
+                        <Text style={[styles.statValue, { color: colors.text }]}>8</Text>
+                        <Text style={[styles.statLabel, { color: colors.textSecondary }]}>CHATS</Text>
                     </View>
                 </View>
 
                 <View style={styles.infoSection}>
-                    <Text style={styles.sectionLabel}>ACCOUNT SETTINGS</Text>
-                    <TouchableOpacity style={styles.menuItem}>
-                        <Text style={styles.menuText}>PERSONAL INFORMATION</Text>
-                        <Text style={styles.arrowLabel}>›</Text>
+                    <Text style={[styles.sectionLabel, { color: colors.text }]}>ACCOUNT SETTINGS</Text>
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.border }]}>
+                        <Text style={[styles.menuText, { color: colors.text }]}>PERSONAL INFORMATION</Text>
+                        <Text style={[styles.arrowLabel, { color: colors.textSecondary }]}>›</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
-                        <Text style={styles.menuText}>NOTIFICATIONS</Text>
-                        <Text style={styles.arrowLabel}>›</Text>
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.border }]}>
+                        <Text style={[styles.menuText, { color: colors.text }]}>NOTIFICATIONS</Text>
+                        <Text style={[styles.arrowLabel, { color: colors.textSecondary }]}>›</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
-                        <Text style={styles.menuText}>PRIVACY & SECURITY</Text>
-                        <Text style={styles.arrowLabel}>›</Text>
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.border }]}>
+                        <Text style={[styles.menuText, { color: colors.text }]}>PRIVACY & SECURITY</Text>
+                        <Text style={[styles.arrowLabel, { color: colors.textSecondary }]}>›</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.menuItem}>
-                        <Text style={styles.menuText}>HELP & SUPPORT</Text>
-                        <Text style={styles.arrowLabel}>›</Text>
+                    <TouchableOpacity style={[styles.menuItem, { borderBottomColor: colors.border }]}>
+                        <Text style={[styles.menuText, { color: colors.text }]}>HELP & SUPPORT</Text>
+                        <Text style={[styles.arrowLabel, { color: colors.textSecondary }]}>›</Text>
                     </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity
-                    style={styles.logoutButton}
+                    style={[styles.logoutButton, { borderColor: colors.text }]}
                     onPress={() => navigation.navigate('Welcome')}
                 >
-                    <Text style={styles.logoutText}>LOG OUT</Text>
+                    <Text style={[styles.logoutText, { color: colors.text }]}>LOG OUT</Text>
                 </TouchableOpacity>
             </ScrollView>
         </SafeAreaView>

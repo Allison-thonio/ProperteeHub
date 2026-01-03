@@ -3,6 +3,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Screens
+import SplashScreen from '../screens/SplashScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import RoleSelectionScreen from '../screens/RoleSelectionScreen';
 import SellerRegistrationScreen from '../screens/auth/SellerRegistrationScreen';
@@ -28,13 +29,18 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function AppNavigator() {
     return (
         <Stack.Navigator
-            initialRouteName="Onboarding"
+            initialRouteName="Splash"
             screenOptions={{
                 headerShown: true,
                 headerBackTitle: '',
                 headerTintColor: '#1a1a1a',
             }}
         >
+            <Stack.Screen
+                name="Splash"
+                component={SplashScreen}
+                options={{ headerShown: false }}
+            />
             <Stack.Screen
                 name="Onboarding"
                 component={OnboardingScreen}

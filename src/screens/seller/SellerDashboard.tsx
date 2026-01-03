@@ -4,7 +4,12 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'rea
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import GlobalPropertyMap from '../../components/GlobalPropertyMap'; // Import the Map
+import GlobalPropertyMap from '../../components/GlobalPropertyMap';
+import { useTheme } from '../../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
+import { Animated, Dimensions } from 'react-native';
+
+const { width } = Dimensions.get('window');
 
 
 type Props = {
@@ -43,19 +48,40 @@ const MAP_PROPERTIES = MOCK_PROPERTIES.map(p => ({
 }));
 
 export default function SellerDashboard({ navigation }: Props) {
+    const { colors, isDark } = useTheme();
+
+    // Animation refs
+    const slideAnim = React.useRef(new Animated.Value(-width)).current;
+    const fadeAnim = React.useRef(new Animated.Value(0)).current;
+
+    React.useEffect(() => {
+        Animated.parallel([
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 600,
+                useNativeDriver: true,
+            }),
+            Animated.spring(slideAnim, {
+                toValue: 0,
+                tension: 20,
+                friction: 7,
+                useNativeDriver: true,
+            })
+        ]).start();
+    }, []);
 
     const renderStatusBadge = (status: string) => {
         switch (status) {
             case 'pending':
                 return (
-                    <View style={[styles.badge, { backgroundColor: '#f8f8f8', borderColor: '#D4AF37', borderWidth: 1 }]}>
+                    <View style={[styles.badge, { backgroundColor: isDark ? '#1a1a1a' : '#f8f8f8', borderColor: '#D4AF37', borderWidth: 1 }]}>
                         <Text style={{ color: '#D4AF37', fontSize: 10, fontWeight: '900' }}>VERIFYING</Text>
                     </View>
                 );
             case 'active':
                 return (
-                    <View style={[styles.badge, { backgroundColor: '#000' }]}>
-                        <Text style={{ color: '#fff', fontSize: 10, fontWeight: '900' }}>ACTIVE</Text>
+                    <View style={[styles.badge, { backgroundColor: colors.text }]}>
+                        <Text style={{ color: colors.background, fontSize: 10, fontWeight: '900' }}>ACTIVE</Text>
                     </View>
                 );
             default:
@@ -64,92 +90,96 @@ export default function SellerDashboard({ navigation }: Props) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            {/* Header */}
-            <View style={styles.header}>
-                <View>
-                    <Text style={styles.greeting}>PROPERTEEHUB</Text>
-                    <Text style={styles.subtitle}>OFFICIAL PARTNER</Text>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar style="auto" />
+
+            <Animated.View style={{ flex: 1, opacity: fadeAnim, transform: [{ translateX: slideAnim }] }}>
+                {/* Header */}
+                <View style={styles.header}>
+                    <View>
+                        <Text style={styles.greeting}>PROPERTEEHUB</Text>
+                        <Text style={[styles.subtitle, { color: colors.text }]}>OFFICIAL PARTNER</Text>
+                    </View>
+                    <View style={styles.headerRight}>
+                        <TouchableOpacity
+                            style={[styles.messageBtn, { backgroundColor: colors.background, borderColor: colors.text }]}
+                            onPress={() => navigation.navigate('ChatList')}
+                        >
+                            <Text style={[styles.messageBtnText, { color: colors.text }]}>MESSAGES</Text>
+                            <View style={styles.badgeDot} />
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('SellerProfile')}>
+                            <Image
+                                style={[styles.profilePic, { borderColor: colors.text }]}
+                                source={{ uri: 'https://ui-avatars.com/api/?name=John+Doe&background=000&color=fff' }}
+                            />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={styles.headerRight}>
+
+                {/* Stats Card */}
+                <View style={[styles.statsCard, { backgroundColor: colors.text }]}>
                     <TouchableOpacity
-                        style={styles.messageBtn}
-                        onPress={() => navigation.navigate('ChatList')}
+                        style={styles.statItem}
+                        onPress={() => navigation.navigate('ListingsManagement', { filter: 'active' })}
                     >
-                        <Text style={styles.messageBtnText}>MESSAGES</Text>
-                        <View style={styles.badgeDot} />
+                        <Text style={[styles.statNumber, { color: colors.background }]}>12</Text>
+                        <Text style={[styles.statLabel, { color: isDark ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)' }]}>ACTIVE</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity onPress={() => navigation.navigate('SellerProfile')}>
-                        <Image
-                            style={styles.profilePic}
-                            source={{ uri: 'https://ui-avatars.com/api/?name=John+Doe&background=000&color=fff' }}
-                        />
+                    <View style={[styles.divider, { backgroundColor: isDark ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.2)' }]} />
+                    <TouchableOpacity
+                        style={styles.statItem}
+                        onPress={() => navigation.navigate('ListingsManagement', { filter: 'views' })}
+                    >
+                        <Text style={[styles.statNumber, { color: colors.background }]}>45</Text>
+                        <Text style={[styles.statLabel, { color: isDark ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)' }]}>VIEWS</Text>
+                    </TouchableOpacity>
+                    <View style={[styles.divider, { backgroundColor: isDark ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.2)' }]} />
+                    <TouchableOpacity
+                        style={styles.statItem}
+                        onPress={() => navigation.navigate('InquiriesList')}
+                    >
+                        <Text style={[styles.statNumber, { color: colors.background }]}>3</Text>
+                        <Text style={[styles.statLabel, { color: isDark ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)' }]}>INQUIRIES</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
 
-            {/* Stats Card */}
-            <View style={styles.statsCard}>
-                <TouchableOpacity
-                    style={styles.statItem}
-                    onPress={() => navigation.navigate('ListingsManagement', { filter: 'active' })}
-                >
-                    <Text style={styles.statNumber}>12</Text>
-                    <Text style={styles.statLabel}>ACTIVE</Text>
-                </TouchableOpacity>
-                <View style={styles.divider} />
-                <TouchableOpacity
-                    style={styles.statItem}
-                    onPress={() => navigation.navigate('ListingsManagement', { filter: 'views' })}
-                >
-                    <Text style={styles.statNumber}>45</Text>
-                    <Text style={styles.statLabel}>VIEWS</Text>
-                </TouchableOpacity>
-                <View style={styles.divider} />
-                <TouchableOpacity
-                    style={styles.statItem}
-                    onPress={() => navigation.navigate('InquiriesList')}
-                >
-                    <Text style={styles.statNumber}>3</Text>
-                    <Text style={styles.statLabel}>INQUIRIES</Text>
-                </TouchableOpacity>
-            </View>
+                <View style={styles.sectionHeader}>
+                    <Text style={[styles.sectionTitle, { color: colors.text }]}>REAL ESTATE MAP</Text>
+                </View>
 
-            <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>REAL ESTATE MAP</Text>
-            </View>
+                {/* Map Widget */}
+                <View style={{ paddingHorizontal: 20 }}>
+                    <GlobalPropertyMap properties={MAP_PROPERTIES} height={200} userRole="seller" />
+                </View>
 
-            {/* Map Widget */}
-            <View style={{ paddingHorizontal: 20 }}>
-                <GlobalPropertyMap properties={MAP_PROPERTIES} height={200} />
-            </View>
+                <View style={styles.sectionHeader}>
+                    <Text style={[styles.sectionTitle, { color: colors.text }]}>MY LISTINGS</Text>
+                    <TouchableOpacity onPress={() => navigation.navigate('ListingsManagement', {})}>
+                        <Text style={styles.seeAll}>SEE ALL</Text>
+                    </TouchableOpacity>
+                </View>
 
-            <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>MY LISTINGS</Text>
-                <TouchableOpacity onPress={() => navigation.navigate('ListingsManagement', {})}>
-                    <Text style={styles.seeAll}>SEE ALL</Text>
-                </TouchableOpacity>
-            </View>
-
-            <ScrollView contentContainerStyle={styles.listContainer}>
-                {MOCK_PROPERTIES.map(item => (
-                    <TouchableOpacity
-                        key={item.id}
-                        style={styles.propertyCard}
-                        onPress={() => navigation.navigate('PropertyDetails', { propertyId: item.id, userRole: 'seller' })}
-                    >
-                        <View style={styles.cardImagePlaceholder} />
-                        <View style={styles.cardContent}>
-                            <View style={styles.cardTop}>
-                                {renderStatusBadge(item.status)}
-                                <Text style={styles.price}>{item.price}</Text>
+                <ScrollView contentContainerStyle={styles.listContainer}>
+                    {MOCK_PROPERTIES.map(item => (
+                        <TouchableOpacity
+                            key={item.id}
+                            style={[styles.propertyCard, { backgroundColor: colors.card, borderColor: colors.border }]}
+                            onPress={() => navigation.navigate('PropertyDetails', { propertyId: item.id, userRole: 'seller' })}
+                        >
+                            <View style={styles.cardImagePlaceholder} />
+                            <View style={styles.cardContent}>
+                                <View style={styles.cardTop}>
+                                    {renderStatusBadge(item.status)}
+                                    <Text style={[styles.price, { color: colors.text }]}>{item.price}</Text>
+                                </View>
+                                <Text style={[styles.cardTitle, { color: colors.text }]}>{item.title}</Text>
+                                <Text style={[styles.cardLocation, { color: colors.textSecondary }]}>{item.location.toUpperCase()}</Text>
                             </View>
-                            <Text style={styles.cardTitle}>{item.title}</Text>
-                            <Text style={styles.cardLocation}>{item.location.toUpperCase()}</Text>
-                        </View>
-                    </TouchableOpacity>
-                ))}
-            </ScrollView>
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
+            </Animated.View>
 
             <TouchableOpacity
                 style={styles.fab}

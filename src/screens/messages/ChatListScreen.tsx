@@ -4,6 +4,8 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '../../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
 
 type Props = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'ChatList'>;
@@ -44,6 +46,7 @@ const MOCK_CHATS = [
 ];
 
 export default function ChatListScreen({ navigation }: Props) {
+    const { colors, isDark } = useTheme();
 
     const renderItem = ({ item }: { item: typeof MOCK_CHATS[0] }) => (
         <TouchableOpacity
@@ -57,20 +60,21 @@ export default function ChatListScreen({ navigation }: Props) {
             <Image source={{ uri: item.userAvatar }} style={styles.avatar} />
 
             <View style={styles.chatContent}>
-                <View style={styles.chatHeader}>
-                    <Text style={styles.userName}>{item.userName}</Text>
-                    <Text style={styles.time}>{item.time}</Text>
+                <View style={[styles.chatHeader, { backgroundColor: 'transparent' }]}>
+                    <Text style={[styles.userName, { color: colors.text }]}>{item.userName}</Text>
+                    <Text style={[styles.time, { color: colors.textSecondary }]}>{item.time}</Text>
                 </View>
 
                 <Text numberOfLines={1} style={[
                     styles.lastMessage,
-                    item.unread > 0 && styles.lastMessageUnread
+                    { color: colors.textSecondary },
+                    item.unread > 0 && [styles.lastMessageUnread, { color: colors.text }]
                 ]}>
                     {item.lastMessage}
                 </Text>
 
                 {item.propertyContext && (
-                    <Text style={styles.contextLabel} numberOfLines={1}>
+                    <Text style={[styles.contextLabel, { backgroundColor: isDark ? '#1a1a1a' : '#f0f8ff', color: colors.primary }]} numberOfLines={1}>
                         📌 {item.propertyContext}
                     </Text>
                 )}
@@ -85,9 +89,10 @@ export default function ChatListScreen({ navigation }: Props) {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.title}>Messages</Text>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar style="auto" />
+            <View style={[styles.header, { borderBottomColor: colors.border }]}>
+                <Text style={[styles.title, { color: colors.text }]}>Messages</Text>
             </View>
 
             <FlatList
@@ -95,7 +100,7 @@ export default function ChatListScreen({ navigation }: Props) {
                 keyExtractor={item => item.id}
                 renderItem={renderItem}
                 contentContainerStyle={styles.listContent}
-                ItemSeparatorComponent={() => <View style={styles.separator} />}
+                ItemSeparatorComponent={() => <View style={[styles.separator, { backgroundColor: colors.border }]} />}
             />
         </SafeAreaView>
     );

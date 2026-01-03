@@ -4,6 +4,8 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
+import { useTheme } from '../../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'InquiriesList'>;
 
@@ -27,13 +29,15 @@ const MOCK_INQUIRIES = [
 ];
 
 export default function InquiriesListScreen({ navigation }: Props) {
+    const { colors, isDark } = useTheme();
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar style="auto" />
+            <View style={[styles.header, { borderBottomColor: colors.border }]}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Text style={styles.backText}>←</Text>
+                    <Text style={[styles.backText, { color: colors.text }]}>←</Text>
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>Recent Inquiries</Text>
+                <Text style={[styles.headerTitle, { color: colors.text }]}>Recent Inquiries</Text>
                 <View style={{ width: 30 }} />
             </View>
 
@@ -42,17 +46,17 @@ export default function InquiriesListScreen({ navigation }: Props) {
                 keyExtractor={item => item.id}
                 renderItem={({ item }) => (
                     <TouchableOpacity
-                        style={styles.card}
+                        style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}
                         onPress={() => navigation.navigate('ChatScreen', { userId: item.id, userName: item.userName, propertyTitle: item.property })}
                     >
                         <Image source={{ uri: item.avatar }} style={styles.avatar} />
                         <View style={styles.info}>
                             <View style={styles.topRow}>
-                                <Text style={styles.userName}>{item.userName}</Text>
-                                <Text style={styles.time}>{item.time}</Text>
+                                <Text style={[styles.userName, { color: colors.text }]}>{item.userName}</Text>
+                                <Text style={[styles.time, { color: colors.textSecondary }]}>{item.time}</Text>
                             </View>
-                            <Text style={styles.propertyText}>Re: {item.property}</Text>
-                            <Text numberOfLines={1} style={styles.messageSnippet}>{item.message}</Text>
+                            <Text style={[styles.propertyText, { color: colors.primary }]}>Re: {item.property}</Text>
+                            <Text numberOfLines={1} style={[styles.messageSnippet, { color: colors.textSecondary }]}>{item.message}</Text>
                         </View>
                     </TouchableOpacity>
                 )}

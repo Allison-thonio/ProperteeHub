@@ -16,6 +16,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 import { useTheme } from '../context/ThemeContext';
 import { StatusBar } from 'expo-status-bar';
+import { Animated } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -53,11 +54,26 @@ export default function OnboardingScreen({ navigation }: Props) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const flatListRef = useRef<FlatList>(null);
 
-    const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const contentOffsetX = event.nativeEvent.contentOffset.x;
-        const index = Math.round(contentOffsetX / width);
-        setCurrentIndex(index);
-    };
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+
+    const onViewableItemsChanged = useRef(({ viewableItems }: any) => {
+        if (viewableItems.length > 0) {
+            setCurrentIndex(viewableItems[0].index);
+            fadeAnim.setValue(0);
+            Animated.timing(fadeAnim, {
+                toValue: 1,
+                duration: 600,
+                useNativeDriver: true,
+            }).start();
+        }
+    }).current;
+
+    const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+
+    const handleScroll = Animated.event(
+        [{ nativeEvent: { contentOffset: { x: new Animated.Value(0) } } }],
+        { useNativeDriver: false }
+    );
 
     const goToNext = () => {
         if (currentIndex < ONBOARDING_DATA.length - 1) {
@@ -73,7 +89,7 @@ export default function OnboardingScreen({ navigation }: Props) {
 
     return (
         <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
-            <StatusBar style={isDark ? 'light' : 'dark'} />
+            <StatusBar style="auto" />
             <TouchableOpacity style={styles.skipBtn} onPress={skip}>
                 <Text style={[styles.skipText, { color: colors.textSecondary }]}>SKIP</Text>
             </TouchableOpacity>
@@ -85,14 +101,33 @@ export default function OnboardingScreen({ navigation }: Props) {
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
                 onScroll={handleScroll}
+                onViewableItemsChanged={onViewableItemsChanged}
+                viewabilityConfig={viewConfig}
+                scrollEventThrottle={32}
                 keyExtractor={(item) => item.id}
                 renderItem={({ item }) => (
                     <View style={styles.slide}>
-                        <Image source={item.image} style={styles.image} resizeMode="contain" />
-                        <View style={styles.textContainer}>
+                        <Animated.Image
+                            source={item.image}
+                            style={[
+                                styles.image,
+                                {
+                                    opacity: fadeAnim,
+                                    transform: [{ scale: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [0.9, 1] }) }]
+                                }
+                            ]}
+                            resizeMode="contain"
+                        />
+                        <Animated.View style={[
+                            styles.textContainer,
+                            {
+                                opacity: fadeAnim,
+                                transform: [{ translateY: fadeAnim.interpolate({ inputRange: [0, 1], outputRange: [20, 0] }) }]
+                            }
+                        ]}>
                             <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
                             <Text style={[styles.description, { color: colors.textSecondary }]}>{item.description}</Text>
-                        </View>
+                        </Animated.View>
                     </View>
                 )}
             />

@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
+import { useTheme } from '../../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
@@ -19,6 +21,7 @@ type Props = {
 };
 
 export default function SellerRegistrationScreen({ navigation }: Props) {
+    const { colors, isDark } = useTheme();
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -56,29 +59,32 @@ export default function SellerRegistrationScreen({ navigation }: Props) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar style="auto" />
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Seller Registration</Text>
-                    <Text style={styles.subtitle}>Start listing your properties today.</Text>
+                    <Text style={[styles.title, { color: colors.text }]}>Seller Registration</Text>
+                    <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Start listing your properties today.</Text>
                 </View>
 
                 <View style={styles.form}>
                     <View style={styles.inputGroup}>
-                        <Text style={styles.label}>Full Name</Text>
+                        <Text style={[styles.label, { color: colors.text }]}>FULL NAME</Text>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
                             placeholder="John Doe"
+                            placeholderTextColor={colors.textSecondary}
                             value={formData.fullName}
                             onChangeText={(text) => setFormData({ ...formData, fullName: text })}
                         />
                     </View>
 
                     <View style={styles.inputGroup}>
-                        <Text style={styles.label}>Email Address</Text>
+                        <Text style={[styles.label, { color: colors.text }]}>EMAIL ADDRESS</Text>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
                             placeholder="john@example.com"
+                            placeholderTextColor={colors.textSecondary}
                             keyboardType="email-address"
                             autoCapitalize="none"
                             value={formData.email}
@@ -87,10 +93,11 @@ export default function SellerRegistrationScreen({ navigation }: Props) {
                     </View>
 
                     <View style={styles.inputGroup}>
-                        <Text style={styles.label}>Phone Number</Text>
+                        <Text style={[styles.label, { color: colors.text }]}>PHONE NUMBER</Text>
                         <TextInput
-                            style={styles.input}
-                            placeholder="+1 234 567 8900"
+                            style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
+                            placeholder="+234 812 345 6789"
+                            placeholderTextColor={colors.textSecondary}
                             keyboardType="phone-pad"
                             value={formData.phone}
                             onChangeText={(text) => setFormData({ ...formData, phone: text })}
@@ -98,28 +105,32 @@ export default function SellerRegistrationScreen({ navigation }: Props) {
                     </View>
 
                     <View style={styles.switchGroup}>
-                        <Text style={styles.label}>Are you a Business/Firm?</Text>
+                        <Text style={[styles.label, { color: colors.text }]}>ARE YOU A FIRM / COMPANY?</Text>
                         <Switch
                             value={formData.isBusiness}
                             onValueChange={(val) => setFormData({ ...formData, isBusiness: val })}
-                            trackColor={{ false: '#767577', true: '#2a9d8f' }}
+                            trackColor={{ false: colors.border, true: colors.primary }}
                         />
                     </View>
 
                     {formData.isBusiness && (
                         <View style={styles.inputGroup}>
-                            <Text style={styles.label}>Business Name</Text>
+                            <Text style={[styles.label, { color: colors.text }]}>BUSINESS NAME</Text>
                             <TextInput
-                                style={styles.input}
+                                style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
                                 placeholder="Propertee Realtors Ltd"
+                                placeholderTextColor={colors.textSecondary}
                                 value={formData.businessName}
                                 onChangeText={(text) => setFormData({ ...formData, businessName: text })}
                             />
                         </View>
                     )}
 
-                    <TouchableOpacity style={styles.registerButton} onPress={handleRegister}>
-                        <Text style={styles.buttonText}>Create Seller Account</Text>
+                    <TouchableOpacity
+                        style={[styles.registerButton, { backgroundColor: colors.text }]}
+                        onPress={handleRegister}
+                    >
+                        <Text style={[styles.buttonText, { color: colors.background }]}>CREATE SELLER ACCOUNT</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

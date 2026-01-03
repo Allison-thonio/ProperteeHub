@@ -5,6 +5,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
+import { useTheme } from '../context/ThemeContext';
 
 type PropertyLocation = {
     id: string;
@@ -28,6 +29,7 @@ const DEFAULT_REGION = {
 };
 
 export default function GlobalPropertyMap({ properties, height = 250, userRole }: Props) {
+    const { colors, isDark } = useTheme();
     const mapRef = useRef<MapView>(null);
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -46,7 +48,7 @@ export default function GlobalPropertyMap({ properties, height = 250, userRole }
     };
 
     return (
-        <View style={[styles.container, { height }]}>
+        <View style={[styles.container, { height, borderColor: colors.border }]}>
             <MapView
                 ref={mapRef}
                 style={styles.map}
@@ -61,17 +63,17 @@ export default function GlobalPropertyMap({ properties, height = 250, userRole }
                         onPress={() => navigation.navigate('PropertyDetails', { propertyId: prop.id, userRole })}
                     >
                         <View style={styles.markerContainer}>
-                            <View style={styles.markerBubble}>
-                                <Text style={styles.markerText}>{prop.price}</Text>
+                            <View style={[styles.markerBubble, { backgroundColor: colors.text, borderColor: colors.background }]}>
+                                <Text style={[styles.markerText, { color: colors.background }]}>{prop.price}</Text>
                             </View>
-                            <View style={styles.markerArrow} />
+                            <View style={[styles.markerArrow, { borderTopColor: colors.text }]} />
                         </View>
                     </Marker>
                 ))}
             </MapView>
 
-            <TouchableOpacity style={styles.expandButton} onPress={openGoogleMaps}>
-                <Text style={styles.expandText}>OPEN IN MAPS</Text>
+            <TouchableOpacity style={[styles.expandButton, { backgroundColor: colors.background, borderColor: colors.text }]} onPress={openGoogleMaps}>
+                <Text style={[styles.expandText, { color: colors.text }]}>OPEN IN MAPS</Text>
             </TouchableOpacity>
         </View>
     );

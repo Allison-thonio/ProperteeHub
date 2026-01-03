@@ -4,6 +4,8 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
+import { useTheme } from '../../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ListingsManagement'>;
 
@@ -14,17 +16,18 @@ const MOCK_DATA = [
 ];
 
 export default function ListingsManagementScreen({ route, navigation }: Props) {
+    const { colors, isDark } = useTheme();
     const { filter } = route.params;
 
     const renderItem = ({ item }: { item: typeof MOCK_DATA[0] }) => (
         <TouchableOpacity
-            style={styles.card}
+            style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}
             onPress={() => navigation.navigate('PropertyDetails', { propertyId: item.id })}
         >
-            <View style={styles.imagePlaceholder} />
+            <View style={[styles.imagePlaceholder, { backgroundColor: colors.border }]} />
             <View style={styles.cardInfo}>
-                <Text style={styles.cardTitle}>{item.title}</Text>
-                <Text style={styles.cardPrice}>{item.price}</Text>
+                <Text style={[styles.cardTitle, { color: colors.text }]}>{item.title}</Text>
+                <Text style={[styles.cardPrice, { color: colors.primary }]}>{item.price}</Text>
                 <View style={styles.cardFooter}>
                     <View style={[styles.badge, item.status === 'Active' ? styles.activeBadge : styles.pendingBadge]}>
                         <Text style={styles.badgeText}>{item.status}</Text>
@@ -36,12 +39,13 @@ export default function ListingsManagementScreen({ route, navigation }: Props) {
     );
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar style="auto" />
+            <View style={[styles.header, { borderBottomColor: colors.border }]}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Text style={styles.backText}>←</Text>
+                    <Text style={[styles.backText, { color: colors.text }]}>←</Text>
                 </TouchableOpacity>
-                <Text style={styles.headerTitle}>{filter === 'views' ? 'View Statistics' : 'My Listings'}</Text>
+                <Text style={[styles.headerTitle, { color: colors.text }]}>{filter === 'views' ? 'View Statistics' : 'My Listings'}</Text>
                 <View style={{ width: 30 }} />
             </View>
 

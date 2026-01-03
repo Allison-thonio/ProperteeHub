@@ -12,6 +12,8 @@ import {
 } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
+import { useTheme } from '../../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Props = {
@@ -19,6 +21,7 @@ type Props = {
 };
 
 export default function BuyerRegistrationScreen({ navigation }: Props) {
+    const { colors, isDark } = useTheme();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         fullName: '',
@@ -46,29 +49,32 @@ export default function BuyerRegistrationScreen({ navigation }: Props) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar style="auto" />
             <ScrollView contentContainerStyle={styles.scrollContent}>
                 <View style={styles.header}>
-                    <Text style={styles.title}>Find Your Home</Text>
-                    <Text style={styles.subtitle}>Create an account to browse and save properties.</Text>
+                    <Text style={[styles.title, { color: colors.text }]}>Find Your Home</Text>
+                    <Text style={[styles.subtitle, { color: colors.textSecondary }]}>Create an account to browse and save properties.</Text>
                 </View>
 
                 <View style={styles.form}>
                     <View style={styles.inputGroup}>
-                        <Text style={styles.label}>Full Name</Text>
+                        <Text style={[styles.label, { color: colors.text }]}>FULL NAME</Text>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
                             placeholder="Alice Johnson"
+                            placeholderTextColor={colors.textSecondary}
                             value={formData.fullName}
                             onChangeText={(text) => setFormData({ ...formData, fullName: text })}
                         />
                     </View>
 
                     <View style={styles.inputGroup}>
-                        <Text style={styles.label}>Email Address</Text>
+                        <Text style={[styles.label, { color: colors.text }]}>EMAIL ADDRESS</Text>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
                             placeholder="alice@example.com"
+                            placeholderTextColor={colors.textSecondary}
                             keyboardType="email-address"
                             autoCapitalize="none"
                             value={formData.email}
@@ -77,10 +83,11 @@ export default function BuyerRegistrationScreen({ navigation }: Props) {
                     </View>
 
                     <View style={styles.inputGroup}>
-                        <Text style={styles.label}>Password</Text>
+                        <Text style={[styles.label, { color: colors.text }]}>PASSWORD</Text>
                         <TextInput
-                            style={styles.input}
+                            style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
                             placeholder="••••••••"
+                            placeholderTextColor={colors.textSecondary}
                             secureTextEntry
                             value={formData.password}
                             onChangeText={(text) => setFormData({ ...formData, password: text })}
@@ -88,11 +95,11 @@ export default function BuyerRegistrationScreen({ navigation }: Props) {
                     </View>
 
                     <TouchableOpacity
-                        style={styles.registerButton}
+                        style={[styles.registerButton, { backgroundColor: colors.text }]}
                         onPress={handleRegister}
                         disabled={loading}
                     >
-                        {loading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Sign Up as Buyer</Text>}
+                        {loading ? <ActivityIndicator color={colors.background} /> : <Text style={[styles.buttonText, { color: colors.background }]}>SIGN UP AS BUYER</Text>}
                     </TouchableOpacity>
                 </View>
 
@@ -100,7 +107,7 @@ export default function BuyerRegistrationScreen({ navigation }: Props) {
                     style={styles.loginLink}
                     onPress={() => navigation.navigate('RoleSelection')}
                 >
-                    <Text style={styles.loginLinkText}>Already have an account? <Text style={styles.bold}>Log In</Text></Text>
+                    <Text style={[styles.loginLinkText, { color: colors.textSecondary }]}>Already have an account? <Text style={[styles.bold, { color: colors.primary }]}>Log In</Text></Text>
                 </TouchableOpacity>
             </ScrollView>
         </SafeAreaView>

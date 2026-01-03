@@ -1,9 +1,11 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Animated, Dimensions } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 import { StatusBar } from 'expo-status-bar';
+
+const { width } = Dimensions.get('window');
 import { useTheme } from '../context/ThemeContext';
 
 type Props = {
@@ -13,11 +15,55 @@ type Props = {
 export default function RoleSelectionScreen({ navigation }: Props) {
     const { colors, toggleTheme, isDark } = useTheme();
 
+    // Animation refs
+    const slideAnimLogo = React.useRef(new Animated.Value(-width)).current;
+    const slideAnimHeader = React.useRef(new Animated.Value(-width)).current;
+    const slideAnimButtons = React.useRef(new Animated.Value(-width)).current;
+    const fadeAnimHero = React.useRef(new Animated.Value(0)).current;
+
+    React.useEffect(() => {
+        Animated.stagger(100, [
+            Animated.timing(fadeAnimHero, {
+                toValue: 1,
+                duration: 800,
+                useNativeDriver: true,
+            }),
+            Animated.spring(slideAnimLogo, {
+                toValue: 0,
+                tension: 20,
+                friction: 7,
+                useNativeDriver: true,
+            }),
+            Animated.spring(slideAnimHeader, {
+                toValue: 0,
+                tension: 20,
+                friction: 7,
+                useNativeDriver: true,
+            }),
+            Animated.spring(slideAnimButtons, {
+                toValue: 0,
+                tension: 15,
+                friction: 7,
+                useNativeDriver: true,
+            }),
+        ]).start();
+    }, []);
+
+    const handleNavigation = (screen: keyof RootStackParamList) => {
+        Animated.timing(slideAnimButtons, {
+            toValue: -width,
+            duration: 300,
+            useNativeDriver: true,
+        }).start(() => {
+            navigation.navigate(screen as any);
+        });
+    };
+
     return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>
-            <StatusBar style={isDark ? "light" : "dark"} />
+            <StatusBar style="auto" />
 
-            <View style={styles.topSection}>
+            <Animated.View style={[styles.topSection, { opacity: fadeAnimHero }]}>
                 <Image
                     source={require('../../assets/onboarding/Relaxing at home-amico.png')}
                     style={styles.heroImage}
@@ -28,24 +74,24 @@ export default function RoleSelectionScreen({ navigation }: Props) {
                         {isDark ? 'LIGHT MODE' : 'DARK MODE'}
                     </Text>
                 </TouchableOpacity>
-            </View>
+            </Animated.View>
 
-            <View style={styles.logoContainer}>
+            <Animated.View style={[styles.logoContainer, { transform: [{ translateX: slideAnimLogo }] }]}>
                 <View style={[styles.logoCircle, { backgroundColor: colors.text }]}>
                     <Text style={[styles.logoText, { color: colors.primary }]}>P</Text>
                 </View>
                 <Text style={[styles.brandTitle, { color: colors.text }]}>PROPERTEEHUB</Text>
-            </View>
+            </Animated.View>
 
-            <View style={styles.header}>
+            <Animated.View style={[styles.header, { transform: [{ translateX: slideAnimHeader }] }]}>
                 <Text style={[styles.title, { color: colors.text }]}>WELCOME</Text>
                 <Text style={[styles.subtitle, { color: colors.textSecondary }]}>SELECT YOUR JOURNEY ON THE PLATFORM</Text>
-            </View>
+            </Animated.View>
 
-            <View style={styles.content}>
+            <Animated.View style={[styles.content, { transform: [{ translateX: slideAnimButtons }] }]}>
                 <TouchableOpacity
                     style={[styles.roleBtnActive, { backgroundColor: colors.text }]}
-                    onPress={() => navigation.navigate('BuyerRegister')}
+                    onPress={() => handleNavigation('BuyerRegister')}
                 >
                     <Text style={[styles.roleBtnTextActive, { color: colors.background }]}>I AM A BUYER</Text>
                     <Text style={[styles.roleBtnSubActive, { color: colors.primary }]}>FIND THE PERFECT PROPERTY</Text>
@@ -53,7 +99,7 @@ export default function RoleSelectionScreen({ navigation }: Props) {
 
                 <TouchableOpacity
                     style={[styles.roleBtn, { backgroundColor: colors.card, borderColor: colors.border }]}
-                    onPress={() => navigation.navigate('SellerRegister')}
+                    onPress={() => handleNavigation('SellerRegister')}
                 >
                     <Text style={[styles.roleBtnText, { color: colors.text }]}>I AM A SELLER</Text>
                     <Text style={[styles.roleBtnSub, { color: colors.textSecondary }]}>LIST YOUR EXCLUSIVE PROPERTIES</Text>
@@ -63,7 +109,7 @@ export default function RoleSelectionScreen({ navigation }: Props) {
                     <Text style={[styles.roleBtnText, { color: colors.text }]}>I AM AN INVESTOR</Text>
                     <Text style={[styles.roleBtnSub, { color: colors.textSecondary }]}>EXPLORE HIGH-YIELD OPPORTUNITIES</Text>
                 </TouchableOpacity>
-            </View>
+            </Animated.View>
 
             <View style={styles.footer}>
                 <Text style={[styles.footerText, { color: colors.textSecondary }]}>ALREADY HAVE AN ACCOUNT?</Text>

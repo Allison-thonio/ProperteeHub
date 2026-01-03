@@ -14,6 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import GlobalPropertyMap from '../../components/GlobalPropertyMap';
+import { useTheme } from '../../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
 
 const { width } = Dimensions.get('window');
 
@@ -54,6 +56,7 @@ const MOCK_PROPERTIES = [
 ];
 
 export default function BuyerMainScreen({ navigation }: Props) {
+    const { colors, isDark } = useTheme();
     const [activeCategory, setActiveCategory] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredProperties, setFilteredProperties] = useState(MOCK_PROPERTIES);
@@ -88,36 +91,38 @@ export default function BuyerMainScreen({ navigation }: Props) {
     }));
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar style="auto" />
             <ScrollView showsVerticalScrollIndicator={false}>
                 {/* Header */}
                 <View style={styles.header}>
                     <View>
                         <Text style={styles.greeting}>ProperteeHub</Text>
-                        <Text style={styles.title}>Explore</Text>
+                        <Text style={[styles.title, { color: colors.text }]}>Explore</Text>
                     </View>
                     <TouchableOpacity
-                        style={styles.messageBtn}
+                        style={[styles.messageBtn, { backgroundColor: colors.text }]}
                         onPress={() => navigation.navigate('ChatList')}
                     >
-                        <Text style={styles.btnText}>MESSAGES</Text>
+                        <Text style={[styles.btnText, { color: colors.background }]}>MESSAGES</Text>
                         <View style={styles.unreadDot} />
                     </TouchableOpacity>
                 </View>
 
                 {/* Search Bar */}
                 <View style={styles.searchContainer}>
-                    <View style={styles.searchBar}>
-                        <Text style={styles.searchLabel}>SEARCH</Text>
+                    <View style={[styles.searchBar, { backgroundColor: colors.card, borderColor: colors.text }]}>
+                        <Text style={[styles.searchLabel, { color: colors.text }]}>SEARCH</Text>
                         <TextInput
                             placeholder="Location, price, type..."
-                            style={styles.searchInput}
+                            placeholderTextColor={colors.textSecondary}
+                            style={[styles.searchInput, { color: colors.text }]}
                             value={searchQuery}
                             onChangeText={setSearchQuery}
                         />
                     </View>
-                    <TouchableOpacity style={styles.filterBtn}>
-                        <Text style={styles.filterBtnText}>FILTER</Text>
+                    <TouchableOpacity style={[styles.filterBtn, { backgroundColor: colors.card, borderColor: colors.text }]}>
+                        <Text style={[styles.filterBtnText, { color: colors.text }]}>FILTER</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -131,10 +136,18 @@ export default function BuyerMainScreen({ navigation }: Props) {
                     {CATEGORIES.map(cat => (
                         <TouchableOpacity
                             key={cat}
-                            style={[styles.categoryChip, activeCategory === cat && styles.categoryChipActive]}
+                            style={[
+                                styles.categoryChip,
+                                { borderColor: colors.border, backgroundColor: colors.card },
+                                activeCategory === cat && [styles.categoryChipActive, { backgroundColor: colors.text, borderColor: colors.text }]
+                            ]}
                             onPress={() => setActiveCategory(cat)}
                         >
-                            <Text style={[styles.categoryText, activeCategory === cat && styles.categoryTextActive]}>
+                            <Text style={[
+                                styles.categoryText,
+                                { color: colors.textSecondary },
+                                activeCategory === cat && [styles.categoryTextActive, { color: colors.background }]
+                            ]}>
                                 {cat.toUpperCase()}
                             </Text>
                         </TouchableOpacity>
@@ -143,15 +156,15 @@ export default function BuyerMainScreen({ navigation }: Props) {
 
                 {/* Home Map */}
                 <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>MAP VIEW</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.text }]}>MAP VIEW</Text>
                 </View>
                 <View style={{ paddingHorizontal: 20 }}>
-                    <GlobalPropertyMap properties={mapProperties} height={180} />
+                    <GlobalPropertyMap properties={mapProperties} height={180} userRole="buyer" />
                 </View>
 
                 {/* Popular Listings */}
                 <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>RECOMMENDED</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.text }]}>RECOMMENDED</Text>
                     <TouchableOpacity>
                         <Text style={styles.seeAll}>SEE ALL</Text>
                     </TouchableOpacity>
@@ -166,19 +179,19 @@ export default function BuyerMainScreen({ navigation }: Props) {
                     {filteredProperties.length > 0 ? filteredProperties.map(item => (
                         <TouchableOpacity
                             key={item.id}
-                            style={styles.propertyCard}
+                            style={[styles.propertyCard, { backgroundColor: colors.card, borderColor: colors.border }]}
                             onPress={() => navigation.navigate('PropertyDetails', { propertyId: item.id, userRole: 'buyer' })}
                         >
                             <Image source={{ uri: item.image }} style={styles.propertyImg} />
                             <View style={styles.priceBadge}>
                                 <Text style={styles.priceBadgeText}>{item.price}</Text>
                             </View>
-                            <Text style={styles.propTitle} numberOfLines={1}>{item.title}</Text>
-                            <Text style={styles.propLocation}>{item.location.toUpperCase()}</Text>
+                            <Text style={[styles.propTitle, { color: colors.text }]} numberOfLines={1}>{item.title}</Text>
+                            <Text style={[styles.propLocation, { color: colors.textSecondary }]}>{item.location.toUpperCase()}</Text>
                         </TouchableOpacity>
                     )) : (
                         <View style={{ width: width - 40, height: 100, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ color: '#888' }}>No matches found</Text>
+                            <Text style={{ color: colors.textSecondary }}>No matches found</Text>
                         </View>
                     )}
                 </ScrollView>
@@ -187,15 +200,15 @@ export default function BuyerMainScreen({ navigation }: Props) {
             </ScrollView>
 
             {/* Basic Bottom Nav Mock */}
-            <View style={styles.bottomNav}>
+            <View style={[styles.bottomNav, { backgroundColor: colors.background, borderTopColor: colors.text }]}>
                 <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('BuyerMain')}>
-                    <Text style={styles.navLabelActive}>HOME</Text>
+                    <Text style={[styles.navLabelActive, { color: colors.text }]}>HOME</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('SavedProperties')}>
-                    <Text style={styles.navLabel}>SAVED</Text>
+                    <Text style={[styles.navLabel, { color: colors.textSecondary }]}>SAVED</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('BuyerProfile')}>
-                    <Text style={styles.navLabel}>PROFILE</Text>
+                    <Text style={[styles.navLabel, { color: colors.textSecondary }]}>PROFILE</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>

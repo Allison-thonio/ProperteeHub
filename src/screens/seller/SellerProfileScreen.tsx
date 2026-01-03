@@ -4,18 +4,22 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'rea
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
+import { useTheme } from '../../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'SellerProfile'>;
 
 export default function SellerProfileScreen({ navigation }: Props) {
+    const { colors, isDark } = useTheme();
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar style="auto" />
             <ScrollView contentContainerStyle={styles.scrollContent}>
-                <View style={styles.header}>
+                <View style={[styles.header, { borderBottomColor: colors.text }]}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                        <Text style={styles.backLabel}>BACK</Text>
+                        <Text style={[styles.backLabel, { color: colors.text }]}>BACK</Text>
                     </TouchableOpacity>
-                    <Text style={styles.headerTitle}>AGENT PROFILE</Text>
+                    <Text style={[styles.headerTitle, { color: colors.text }]}>AGENT PROFILE</Text>
                     <TouchableOpacity onPress={() => navigation.navigate('EditProfile', {
                         currentName: 'John Doe',
                         currentImage: 'https://ui-avatars.com/api/?name=John+Doe&background=000&color=fff',
@@ -28,52 +32,52 @@ export default function SellerProfileScreen({ navigation }: Props) {
 
                 <View style={styles.profileSection}>
                     <Image
-                        style={styles.profilePic}
+                        style={[styles.profilePic, { borderColor: colors.text }]}
                         source={{ uri: 'https://ui-avatars.com/api/?name=John+Doe&background=000&color=fff' }}
                     />
-                    <Text style={styles.name}>John Doe</Text>
-                    <Text style={styles.businessName}>PROPERTEE REALTORS LTD</Text>
-                    <View style={styles.badge}>
-                        <Text style={styles.badgeText}>VERIFIED AGENT</Text>
+                    <Text style={[styles.name, { color: colors.text }]}>John Doe</Text>
+                    <Text style={[styles.businessName, { color: colors.textSecondary }]}>PROPERTEE REALTORS LTD</Text>
+                    <View style={[styles.badge, { backgroundColor: colors.text }]}>
+                        <Text style={[styles.badgeText, { color: colors.background }]}>VERIFIED AGENT</Text>
                     </View>
                 </View>
 
-                <View style={styles.statsContainer}>
+                <View style={[styles.statsContainer, { borderTopColor: colors.border, borderBottomColor: colors.border }]}>
                     <View style={styles.statBox}>
-                        <Text style={styles.statValue}>12</Text>
-                        <Text style={styles.statLabel}>LISTINGS</Text>
+                        <Text style={[styles.statValue, { color: colors.text }]}>12</Text>
+                        <Text style={[styles.statLabel, { color: colors.textSecondary }]}>LISTINGS</Text>
                     </View>
                     <View style={styles.statBox}>
-                        <Text style={styles.statValue}>4.8</Text>
-                        <Text style={styles.statLabel}>RATING</Text>
+                        <Text style={[styles.statValue, { color: colors.text }]}>4.8</Text>
+                        <Text style={[styles.statLabel, { color: colors.textSecondary }]}>RATING</Text>
                     </View>
                     <View style={styles.statBox}>
-                        <Text style={styles.statValue}>3Y</Text>
-                        <Text style={styles.statLabel}>YEARS</Text>
+                        <Text style={[styles.statValue, { color: colors.text }]}>3Y</Text>
+                        <Text style={[styles.statLabel, { color: colors.textSecondary }]}>YEARS</Text>
                     </View>
                 </View>
 
                 <View style={styles.infoSection}>
-                    <Text style={styles.sectionLabel}>CONTACT DETAILS</Text>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>EMAIL</Text>
-                        <Text style={styles.infoValue}>john@propertee.com</Text>
+                    <Text style={[styles.sectionLabel, { color: colors.text }]}>CONTACT DETAILS</Text>
+                    <View style={[styles.infoRow, { borderBottomColor: colors.border }]}>
+                        <Text style={[styles.infoLabel, { color: colors.textSecondary }]}>EMAIL</Text>
+                        <Text style={[styles.infoValue, { color: colors.text }]}>john@propertee.com</Text>
                     </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>PHONE</Text>
-                        <Text style={styles.infoValue}>+234 812 345 6789</Text>
+                    <View style={[styles.infoRow, { borderBottomColor: colors.border }]}>
+                        <Text style={[styles.infoLabel, { color: colors.textSecondary }]}>PHONE</Text>
+                        <Text style={[styles.infoValue, { color: colors.text }]}>+234 812 345 6789</Text>
                     </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>OFFICE</Text>
-                        <Text style={styles.infoValue}>LEKKI PHASE 1, LAGOS</Text>
+                    <View style={[styles.infoRow, { borderBottomColor: colors.border }]}>
+                        <Text style={[styles.infoLabel, { color: colors.textSecondary }]}>OFFICE</Text>
+                        <Text style={[styles.infoValue, { color: colors.text }]}>LEKKI PHASE 1, LAGOS</Text>
                     </View>
                 </View>
 
                 <TouchableOpacity
-                    style={styles.logoutButton}
+                    style={[styles.logoutButton, { borderColor: colors.text }]}
                     onPress={() => navigation.navigate('Welcome')}
                 >
-                    <Text style={styles.logoutText}>LOG OUT</Text>
+                    <Text style={[styles.logoutText, { color: colors.text }]}>LOG OUT</Text>
                 </TouchableOpacity>
             </ScrollView>
         </SafeAreaView>

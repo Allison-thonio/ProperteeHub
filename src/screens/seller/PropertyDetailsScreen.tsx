@@ -14,6 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import GlobalPropertyMap from '../../components/GlobalPropertyMap';
+import { useTheme } from '../../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'PropertyDetails'>;
 
@@ -58,6 +60,7 @@ const PROPERTY_DATA = {
 };
 
 export default function PropertyDetailsScreen({ route, navigation }: Props) {
+    const { colors, isDark } = useTheme();
     const { propertyId, userRole } = route.params;
     const prop = PROPERTY_DATA[propertyId as keyof typeof PROPERTY_DATA] || PROPERTY_DATA['1'];
 
@@ -70,63 +73,64 @@ export default function PropertyDetailsScreen({ route, navigation }: Props) {
     };
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+            <StatusBar style="auto" />
             <ScrollView showsVerticalScrollIndicator={false}>
                 {/* Gallery */}
                 <View style={styles.galleryContainer}>
                     <Image source={{ uri: prop.images[0] }} style={styles.mainImage} />
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconBtn}>
-                        <Text style={styles.navLabel}>BACK</Text>
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={[styles.iconBtn, { backgroundColor: colors.background, borderColor: colors.text }]}>
+                        <Text style={[styles.navLabel, { color: colors.text }]}>BACK</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.iconBtn, styles.shareBtn]} onPress={handleShare}>
-                        <Text style={styles.navLabel}>SHARE</Text>
+                    <TouchableOpacity style={[styles.iconBtn, styles.shareBtn, { backgroundColor: colors.background, borderColor: colors.text }]} onPress={handleShare}>
+                        <Text style={[styles.navLabel, { color: colors.text }]}>SHARE</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.content}>
                     <View style={styles.headerRow}>
                         <Text style={styles.typeLabel}>{prop.type.toUpperCase()}</Text>
-                        <View style={styles.verifiedBadge}>
-                            <Text style={styles.verifiedText}>VERIFIED</Text>
+                        <View style={[styles.verifiedBadge, { backgroundColor: colors.surface, borderColor: colors.text }]}>
+                            <Text style={[styles.verifiedText, { color: colors.text }]}>VERIFIED</Text>
                         </View>
                     </View>
 
-                    <Text style={styles.title}>{prop.title}</Text>
-                    <Text style={styles.location}>{prop.location.toUpperCase()}</Text>
-                    <Text style={styles.price}>{prop.price}</Text>
+                    <Text style={[styles.title, { color: colors.text }]}>{prop.title}</Text>
+                    <Text style={[styles.location, { color: colors.textSecondary }]}>{prop.location.toUpperCase()}</Text>
+                    <Text style={[styles.price, { color: colors.text }]}>{prop.price}</Text>
 
-                    <View style={styles.divider} />
+                    <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
                     {/* Seller Card */}
-                    <Text style={styles.sectionTitle}>LISTING AGENT</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.text }]}>LISTING AGENT</Text>
                     <TouchableOpacity
-                        style={styles.sellerCard}
+                        style={[styles.sellerCard, { backgroundColor: colors.card, borderColor: colors.border }]}
                         onPress={() => navigation.navigate('SellerProfile')}
                     >
                         <Image source={{ uri: prop.seller.avatar }} style={styles.sellerAvatar} />
                         <View style={styles.sellerInfo}>
-                            <Text style={styles.sellerName}>{prop.seller.name}</Text>
-                            <Text style={styles.sellerFirm}>{prop.seller.firm}</Text>
+                            <Text style={[styles.sellerName, { color: colors.text }]}>{prop.seller.name}</Text>
+                            <Text style={[styles.sellerFirm, { color: colors.textSecondary }]}>{prop.seller.firm}</Text>
                         </View>
                         <Text style={styles.viewProfile}>VIEW PAGE</Text>
                     </TouchableOpacity>
 
-                    <View style={styles.divider} />
+                    <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
-                    <Text style={styles.sectionTitle}>Overview</Text>
-                    <Text style={styles.description}>{prop.description}</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.text }]}>Overview</Text>
+                    <Text style={[styles.description, { color: colors.textSecondary }]}>{prop.description}</Text>
 
-                    <Text style={styles.sectionTitle}>Amenities</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.text }]}>Amenities</Text>
                     <View style={styles.amenitiesGrid}>
                         {prop.amenities.map((item, index) => (
-                            <View key={index} style={styles.amenityChip}>
-                                <Text style={styles.amenityText}>{item}</Text>
+                            <View key={index} style={[styles.amenityChip, { backgroundColor: colors.card, borderColor: colors.border }]}>
+                                <Text style={[styles.amenityText, { color: colors.text }]}>{item}</Text>
                             </View>
                         ))}
                     </View>
 
                     {/* Location Map */}
-                    <Text style={styles.sectionTitle}>Location on Map</Text>
+                    <Text style={[styles.sectionTitle, { color: colors.text }]}>Location on Map</Text>
                     <GlobalPropertyMap
                         properties={[{ id: prop.id, title: prop.title, latitude: prop.coordinates.latitude, longitude: prop.coordinates.longitude, price: prop.price }]}
                         height={200}
@@ -139,19 +143,19 @@ export default function PropertyDetailsScreen({ route, navigation }: Props) {
 
             {/* Booking/Contact Footer (Only for buyers/investors) */}
             {userRole !== 'seller' && (
-                <View style={styles.footer}>
-                    <TouchableOpacity style={styles.cartBtn}>
-                        <Text style={styles.cartBtnText}>SAVE</Text>
+                <View style={[styles.footer, { backgroundColor: colors.background, borderTopColor: colors.text }]}>
+                    <TouchableOpacity style={[styles.cartBtn, { borderColor: colors.text }]}>
+                        <Text style={[styles.cartBtnText, { color: colors.text }]}>SAVE</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={styles.contactBtn}
+                        style={[styles.contactBtn, { backgroundColor: colors.text }]}
                         onPress={() => navigation.navigate('ChatScreen', {
                             userId: prop.seller.id,
                             userName: prop.seller.name,
                             propertyTitle: prop.title
                         })}
                     >
-                        <Text style={styles.contactBtnTextMain}>CONTACT SELLER</Text>
+                        <Text style={[styles.contactBtnTextMain, { color: colors.background }]}>CONTACT SELLER</Text>
                     </TouchableOpacity>
                 </View>
             )}

@@ -13,6 +13,8 @@ import {
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTheme } from '../../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'ChatScreen'>;
 
@@ -24,6 +26,7 @@ type Message = {
 };
 
 export default function ChatScreen({ route, navigation }: Props) {
+    const { colors, isDark } = useTheme();
     const { userName, propertyTitle } = route.params;
     const [inputText, setInputText] = useState('');
     const flatListRef = useRef<FlatList>(null);
@@ -57,11 +60,13 @@ export default function ChatScreen({ route, navigation }: Props) {
     const renderMessage = ({ item }: { item: Message }) => (
         <View style={[
             styles.messageBubble,
-            item.sender === 'me' ? styles.myMessage : styles.theirMessage
+            item.sender === 'me'
+                ? [styles.myMessage, { backgroundColor: colors.text }]
+                : [styles.theirMessage, { backgroundColor: colors.card, borderColor: colors.border }]
         ]}>
             <Text style={[
                 styles.messageText,
-                item.sender === 'me' ? styles.myMessageText : styles.theirMessageText
+                item.sender === 'me' ? [styles.myMessageText, { color: colors.background }] : [styles.theirMessageText, { color: colors.text }]
             ]}>{item.text}</Text>
             <Text style={[
                 styles.timeText,
@@ -71,16 +76,17 @@ export default function ChatScreen({ route, navigation }: Props) {
     );
 
     return (
-        <SafeAreaView style={styles.container} edges={['top']}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+            <StatusBar style="auto" />
             {/* Custom Header */}
-            <View style={styles.header}>
+            <View style={[styles.header, { backgroundColor: colors.background, borderBottomColor: colors.border }]}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <Text style={styles.backText}>←</Text>
+                    <Text style={[styles.backText, { color: colors.text }]}>←</Text>
                 </TouchableOpacity>
                 <View>
-                    <Text style={styles.headerName}>{userName}</Text>
+                    <Text style={[styles.headerName, { color: colors.text }]}>{userName}</Text>
                     {propertyTitle && (
-                        <Text style={styles.headerContext}>{propertyTitle}</Text>
+                        <Text style={[styles.headerContext, { color: colors.primary }]}>{propertyTitle}</Text>
                     )}
                 </View>
             </View>
@@ -97,20 +103,21 @@ export default function ChatScreen({ route, navigation }: Props) {
                     contentContainerStyle={styles.listContent}
                 />
 
-                <View style={styles.inputContainer}>
+                <View style={[styles.inputContainer, { backgroundColor: colors.background, borderTopColor: colors.border }]}>
                     <TextInput
-                        style={styles.input}
+                        style={[styles.input, { backgroundColor: colors.card, borderColor: colors.border, color: colors.text }]}
                         placeholder="Type a message..."
+                        placeholderTextColor={colors.textSecondary}
                         value={inputText}
                         onChangeText={setInputText}
                         onSubmitEditing={sendMessage}
                     />
                     <TouchableOpacity
-                        style={[styles.sendButton, !inputText && styles.sendButtonDisabled]}
+                        style={[styles.sendButton, { backgroundColor: colors.text }, !inputText && [styles.sendButtonDisabled, { backgroundColor: colors.border }]]}
                         onPress={sendMessage}
                         disabled={!inputText}
                     >
-                        <Text style={styles.sendButtonText}>Send</Text>
+                        <Text style={[styles.sendButtonText, { color: colors.background }]}>Send</Text>
                     </TouchableOpacity>
                 </View>
             </KeyboardAvoidingView>
