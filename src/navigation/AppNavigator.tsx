@@ -18,6 +18,7 @@ import BuyerRegistrationScreen from '../screens/buyer/BuyerRegistrationScreen';
 import BuyerMainScreen from '../screens/buyer/BuyerMainScreen';
 import BuyerProfileScreen from '../screens/buyer/BuyerProfileScreen';
 import SavedPropertiesScreen from '../screens/buyer/SavedPropertiesScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
 
 // Types
 import { RootStackParamList } from '../types/navigation';
@@ -107,6 +108,11 @@ export default function AppNavigator() {
             <Stack.Screen
                 name="SavedProperties"
                 component={SavedPropertiesScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="EditProfile"
+                component={EditProfileScreen}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

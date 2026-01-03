@@ -9,7 +9,7 @@ export type RootStackParamList = {
     ChatScreen: { userId: string; userName: string; propertyTitle?: string };
     BuyerRegister: undefined;
     BuyerMain: undefined;
-    PropertyDetails: { propertyId: string };
+    PropertyDetails: { propertyId: string; userRole?: 'seller' | 'buyer' | 'investor' };
     InvestorRegister: undefined;
     SellerProfile: undefined;
     ListingsManagement: { filter?: 'active' | 'views' };
@@ -17,4 +17,10 @@ export type RootStackParamList = {
     BuyerProfile: undefined;
     SavedProperties: undefined;
     Onboarding: undefined;
+    EditProfile: {
+        currentName: string;
+        currentImage: string;
+        currentFirm?: string;
+        userRole: 'seller' | 'buyer';
+    };
 };

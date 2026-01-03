@@ -23,7 +23,11 @@ export default function BuyerProfileScreen({ navigation }: Props) {
                         <Text style={styles.backLabel}>BACK</Text>
                     </TouchableOpacity>
                     <Text style={styles.headerTitle}>MY PROFILE</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('EditProfile', {
+                        currentName: 'Alice Johnson',
+                        currentImage: 'https://ui-avatars.com/api/?name=Alice+Buyer&background=000&color=fff',
+                        userRole: 'buyer'
+                    })}>
                         <Text style={styles.editLabel}>EDIT</Text>
                     </TouchableOpacity>
                 </View>

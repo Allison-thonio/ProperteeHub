@@ -167,7 +167,7 @@ export default function BuyerMainScreen({ navigation }: Props) {
                         <TouchableOpacity
                             key={item.id}
                             style={styles.propertyCard}
-                            onPress={() => navigation.navigate('PropertyDetails', { propertyId: item.id })}
+                            onPress={() => navigation.navigate('PropertyDetails', { propertyId: item.id, userRole: 'buyer' })}
                         >
                             <Image source={{ uri: item.image }} style={styles.propertyImg} />
                             <View style={styles.priceBadge}>

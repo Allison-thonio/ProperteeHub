@@ -17,6 +17,7 @@ type PropertyLocation = {
 type Props = {
     properties: PropertyLocation[];
     height?: number;
+    userRole?: 'seller' | 'buyer' | 'investor';
 };
 
 const DEFAULT_REGION = {
@@ -26,7 +27,7 @@ const DEFAULT_REGION = {
     longitudeDelta: 0.0421,
 };
 
-export default function GlobalPropertyMap({ properties, height = 250 }: Props) {
+export default function GlobalPropertyMap({ properties, height = 250, userRole }: Props) {
     const mapRef = useRef<MapView>(null);
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -57,7 +58,7 @@ export default function GlobalPropertyMap({ properties, height = 250 }: Props) {
                     <Marker
                         key={prop.id}
                         coordinate={{ latitude: prop.latitude, longitude: prop.longitude }}
-                        onPress={() => navigation.navigate('PropertyDetails', { propertyId: prop.id })}
+                        onPress={() => navigation.navigate('PropertyDetails', { propertyId: prop.id, userRole })}
                     >
                         <View style={styles.markerContainer}>
                             <View style={styles.markerBubble}>

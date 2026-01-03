@@ -58,7 +58,7 @@ const PROPERTY_DATA = {
 };
 
 export default function PropertyDetailsScreen({ route, navigation }: Props) {
-    const { propertyId } = route.params;
+    const { propertyId, userRole } = route.params;
     const prop = PROPERTY_DATA[propertyId as keyof typeof PROPERTY_DATA] || PROPERTY_DATA['1'];
 
     const handleShare = async () => {
@@ -130,28 +130,31 @@ export default function PropertyDetailsScreen({ route, navigation }: Props) {
                     <GlobalPropertyMap
                         properties={[{ id: prop.id, title: prop.title, latitude: prop.coordinates.latitude, longitude: prop.coordinates.longitude, price: prop.price }]}
                         height={200}
+                        userRole={userRole}
                     />
 
                     <View style={{ height: 100 }} />
                 </View>
             </ScrollView>
 
-            {/* Booking/Contact Footer */}
-            <View style={styles.footer}>
-                <TouchableOpacity style={styles.cartBtn}>
-                    <Text style={styles.cartBtnText}>SAVE</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    style={styles.contactBtn}
-                    onPress={() => navigation.navigate('ChatScreen', {
-                        userId: prop.seller.id,
-                        userName: prop.seller.name,
-                        propertyTitle: prop.title
-                    })}
-                >
-                    <Text style={styles.contactBtnTextMain}>CONTACT SELLER</Text>
-                </TouchableOpacity>
-            </View>
+            {/* Booking/Contact Footer (Only for buyers/investors) */}
+            {userRole !== 'seller' && (
+                <View style={styles.footer}>
+                    <TouchableOpacity style={styles.cartBtn}>
+                        <Text style={styles.cartBtnText}>SAVE</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        style={styles.contactBtn}
+                        onPress={() => navigation.navigate('ChatScreen', {
+                            userId: prop.seller.id,
+                            userName: prop.seller.name,
+                            propertyTitle: prop.title
+                        })}
+                    >
+                        <Text style={styles.contactBtnTextMain}>CONTACT SELLER</Text>
+                    </TouchableOpacity>
+                </View>
+            )}
         </SafeAreaView>
     );
 }

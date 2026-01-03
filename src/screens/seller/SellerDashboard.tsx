@@ -136,7 +136,7 @@ export default function SellerDashboard({ navigation }: Props) {
                     <TouchableOpacity
                         key={item.id}
                         style={styles.propertyCard}
-                        onPress={() => navigation.navigate('PropertyDetails', { propertyId: item.id })}
+                        onPress={() => navigation.navigate('PropertyDetails', { propertyId: item.id, userRole: 'seller' })}
                     >
                         <View style={styles.cardImagePlaceholder} />
                         <View style={styles.cardContent}>

@@ -16,7 +16,12 @@ export default function SellerProfileScreen({ navigation }: Props) {
                         <Text style={styles.backLabel}>BACK</Text>
                     </TouchableOpacity>
                     <Text style={styles.headerTitle}>AGENT PROFILE</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('EditProfile', {
+                        currentName: 'John Doe',
+                        currentImage: 'https://ui-avatars.com/api/?name=John+Doe&background=000&color=fff',
+                        currentFirm: 'PROPERTEE REALTORS LTD',
+                        userRole: 'seller'
+                    })}>
                         <Text style={styles.editLabel}>EDIT</Text>
                     </TouchableOpacity>
                 </View>
