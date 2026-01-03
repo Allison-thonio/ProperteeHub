@@ -48,14 +48,14 @@ export default function SellerDashboard({ navigation }: Props) {
         switch (status) {
             case 'pending':
                 return (
-                    <View style={[styles.badge, { backgroundColor: '#FFF4E5' }]}>
-                        <Text style={{ color: '#FF9500', fontSize: 12, fontWeight: '700' }}>🟡 Verifying</Text>
+                    <View style={[styles.badge, { backgroundColor: '#f8f8f8', borderColor: '#D4AF37', borderWidth: 1 }]}>
+                        <Text style={{ color: '#D4AF37', fontSize: 10, fontWeight: '900' }}>VERIFYING</Text>
                     </View>
                 );
             case 'active':
                 return (
-                    <View style={[styles.badge, { backgroundColor: '#E8F5E9' }]}>
-                        <Text style={{ color: '#2E7D32', fontSize: 12, fontWeight: '700' }}>🟢 Active</Text>
+                    <View style={[styles.badge, { backgroundColor: '#000' }]}>
+                        <Text style={{ color: '#fff', fontSize: 10, fontWeight: '900' }}>ACTIVE</Text>
                     </View>
                 );
             default:
@@ -68,21 +68,21 @@ export default function SellerDashboard({ navigation }: Props) {
             {/* Header */}
             <View style={styles.header}>
                 <View>
-                    <Text style={styles.greeting}>Hello, John 👋</Text>
-                    <Text style={styles.subtitle}>Propertee Realtors Ltd</Text>
+                    <Text style={styles.greeting}>PROPERTEEHUB</Text>
+                    <Text style={styles.subtitle}>OFFICIAL PARTNER</Text>
                 </View>
                 <View style={styles.headerRight}>
                     <TouchableOpacity
                         style={styles.messageBtn}
                         onPress={() => navigation.navigate('ChatList')}
                     >
-                        <Text style={{ fontSize: 20 }}>💬</Text>
+                        <Text style={styles.messageBtnText}>MESSAGES</Text>
                         <View style={styles.badgeDot} />
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => navigation.navigate('SellerProfile')}>
                         <Image
                             style={styles.profilePic}
-                            source={{ uri: 'https://ui-avatars.com/api/?name=John+Doe&background=264653&color=fff' }}
+                            source={{ uri: 'https://ui-avatars.com/api/?name=John+Doe&background=000&color=fff' }}
                         />
                     </TouchableOpacity>
                 </View>
@@ -95,7 +95,7 @@ export default function SellerDashboard({ navigation }: Props) {
                     onPress={() => navigation.navigate('ListingsManagement', { filter: 'active' })}
                 >
                     <Text style={styles.statNumber}>12</Text>
-                    <Text style={styles.statLabel}>Active listings</Text>
+                    <Text style={styles.statLabel}>ACTIVE</Text>
                 </TouchableOpacity>
                 <View style={styles.divider} />
                 <TouchableOpacity
@@ -103,7 +103,7 @@ export default function SellerDashboard({ navigation }: Props) {
                     onPress={() => navigation.navigate('ListingsManagement', { filter: 'views' })}
                 >
                     <Text style={styles.statNumber}>45</Text>
-                    <Text style={styles.statLabel}>Views (Today)</Text>
+                    <Text style={styles.statLabel}>VIEWS</Text>
                 </TouchableOpacity>
                 <View style={styles.divider} />
                 <TouchableOpacity
@@ -111,12 +111,12 @@ export default function SellerDashboard({ navigation }: Props) {
                     onPress={() => navigation.navigate('InquiriesList')}
                 >
                     <Text style={styles.statNumber}>3</Text>
-                    <Text style={styles.statLabel}>Inquiries</Text>
+                    <Text style={styles.statLabel}>INQUIRIES</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Property Map</Text>
+                <Text style={styles.sectionTitle}>REAL ESTATE MAP</Text>
             </View>
 
             {/* Map Widget */}
@@ -125,9 +125,9 @@ export default function SellerDashboard({ navigation }: Props) {
             </View>
 
             <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>My Properties</Text>
+                <Text style={styles.sectionTitle}>MY LISTINGS</Text>
                 <TouchableOpacity onPress={() => navigation.navigate('ListingsManagement', {})}>
-                    <Text style={styles.seeAll}>See All</Text>
+                    <Text style={styles.seeAll}>SEE ALL</Text>
                 </TouchableOpacity>
             </View>
 
@@ -145,7 +145,7 @@ export default function SellerDashboard({ navigation }: Props) {
                                 <Text style={styles.price}>{item.price}</Text>
                             </View>
                             <Text style={styles.cardTitle}>{item.title}</Text>
-                            <Text style={styles.cardLocation}>📍 {item.location}</Text>
+                            <Text style={styles.cardLocation}>{item.location.toUpperCase()}</Text>
                         </View>
                     </TouchableOpacity>
                 ))}
@@ -156,8 +156,7 @@ export default function SellerDashboard({ navigation }: Props) {
                 onPress={() => navigation.navigate('AddProperty')}
                 activeOpacity={0.8}
             >
-                <Text style={styles.fabIcon}>+</Text>
-                <Text style={styles.fabText}>List Property</Text>
+                <Text style={styles.fabText}>ADD LISTING</Text>
             </TouchableOpacity>
         </SafeAreaView>
     );
@@ -166,7 +165,7 @@ export default function SellerDashboard({ navigation }: Props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#FAFAFA',
+        backgroundColor: '#fff',
     },
     header: {
         flexDirection: 'row',
@@ -177,20 +176,24 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     greeting: {
-        fontSize: 24,
-        fontWeight: '800',
-        color: '#1a1a1a',
+        fontSize: 14,
+        fontWeight: '900',
+        color: '#D4AF37',
+        letterSpacing: 2,
     },
     subtitle: {
-        fontSize: 14,
-        color: '#666',
-        fontWeight: '500',
+        fontSize: 10,
+        color: '#000',
+        fontWeight: '900',
+        letterSpacing: 1,
     },
     profilePic: {
-        width: 48,
-        height: 48,
-        borderRadius: 24,
+        width: 44,
+        height: 44,
+        borderRadius: 22,
         backgroundColor: '#eee',
+        borderWidth: 1,
+        borderColor: '#000',
         marginLeft: 15,
     },
     headerRight: {
@@ -198,41 +201,39 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     messageBtn: {
-        padding: 8,
+        paddingVertical: 8,
+        paddingHorizontal: 15,
         backgroundColor: '#fff',
-        borderRadius: 20,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#000',
         marginRight: 5,
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
         position: 'relative',
+    },
+    messageBtnText: {
+        fontSize: 9,
+        fontWeight: '900',
+        color: '#000',
     },
     badgeDot: {
         position: 'absolute',
-        top: 5,
-        right: 5,
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        backgroundColor: '#E76F51',
-        borderWidth: 1.5,
+        top: -3,
+        right: -3,
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: '#D4AF37',
+        borderWidth: 1,
         borderColor: '#fff',
     },
     statsCard: {
         flexDirection: 'row',
-        backgroundColor: '#264653',
+        backgroundColor: '#000',
         marginHorizontal: 20,
-        borderRadius: 16,
+        borderRadius: 4,
         padding: 20,
         justifyContent: 'space-between',
         marginBottom: 30,
-        shadowColor: '#264653',
-        shadowOffset: { width: 0, height: 8 },
-        shadowOpacity: 0.3,
-        shadowRadius: 10,
-        elevation: 8,
     },
     statItem: {
         alignItems: 'center',
@@ -240,13 +241,15 @@ const styles = StyleSheet.create({
     },
     statNumber: {
         fontSize: 20,
-        fontWeight: 'bold',
+        fontWeight: '900',
         color: 'white',
     },
     statLabel: {
-        fontSize: 12,
-        color: 'rgba(255,255,255,0.8)',
-        marginTop: 4,
+        fontSize: 9,
+        color: 'rgba(255,255,255,0.7)',
+        marginTop: 6,
+        fontWeight: '900',
+        letterSpacing: 1,
     },
     divider: {
         width: 1,
@@ -261,13 +264,15 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     sectionTitle: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: '#333',
+        fontSize: 14,
+        fontWeight: '900',
+        color: '#000',
+        letterSpacing: 1,
     },
     seeAll: {
-        color: '#E76F51',
-        fontWeight: '600',
+        color: '#D4AF37',
+        fontWeight: '900',
+        fontSize: 12,
     },
     listContainer: {
         paddingHorizontal: 20,
@@ -275,75 +280,66 @@ const styles = StyleSheet.create({
     },
     propertyCard: {
         backgroundColor: 'white',
-        borderRadius: 16,
-        marginBottom: 16,
+        borderRadius: 4,
+        marginBottom: 15,
         overflow: 'hidden',
         borderWidth: 1,
         borderColor: '#eee',
-        elevation: 2,
-        shadowColor: '#000',
-        shadowOpacity: 0.05,
-        shadowOffset: { width: 0, height: 4 },
     },
     cardImagePlaceholder: {
         height: 140,
-        backgroundColor: '#eaeaea',
+        backgroundColor: '#f8f8f8',
     },
     cardContent: {
-        padding: 16,
+        padding: 15,
     },
     cardTop: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 8,
+        marginBottom: 10,
     },
     badge: {
-        paddingHorizontal: 8,
-        paddingVertical: 4,
-        borderRadius: 6,
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 2,
     },
     price: {
         fontSize: 16,
-        fontWeight: '800',
-        color: '#264653',
+        fontWeight: '900',
+        color: '#000',
     },
     cardTitle: {
         fontSize: 16,
-        fontWeight: '700',
-        color: '#1a1a1a',
+        fontWeight: '800',
+        color: '#000',
         marginBottom: 4,
     },
     cardLocation: {
-        fontSize: 13,
-        color: '#888',
+        fontSize: 11,
+        color: '#666',
+        fontWeight: '600',
     },
     fab: {
         position: 'absolute',
         bottom: 30,
         alignSelf: 'center',
-        backgroundColor: '#E76F51',
+        backgroundColor: '#D4AF37',
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 14,
-        paddingHorizontal: 24,
-        borderRadius: 50,
-        shadowColor: '#E76F51',
-        shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.4,
-        shadowRadius: 10,
+        paddingHorizontal: 30,
+        borderRadius: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
         elevation: 10,
-    },
-    fabIcon: {
-        color: 'white',
-        fontSize: 24,
-        fontWeight: '400',
-        marginRight: 8,
-        marginTop: -2,
     },
     fabText: {
         color: 'white',
-        fontSize: 16,
-        fontWeight: 'bold',
+        fontSize: 12,
+        fontWeight: '900',
+        letterSpacing: 1,
     },
 });

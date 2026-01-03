@@ -76,29 +76,29 @@ export default function PropertyDetailsScreen({ route, navigation }: Props) {
                 <View style={styles.galleryContainer}>
                     <Image source={{ uri: prop.images[0] }} style={styles.mainImage} />
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconBtn}>
-                        <Text style={styles.navIcon}>←</Text>
+                        <Text style={styles.navLabel}>BACK</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={[styles.iconBtn, styles.shareBtn]} onPress={handleShare}>
-                        <Text style={styles.navIcon}>🔗</Text>
+                        <Text style={styles.navLabel}>SHARE</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.content}>
                     <View style={styles.headerRow}>
-                        <Text style={styles.typeLabel}>{prop.type}</Text>
+                        <Text style={styles.typeLabel}>{prop.type.toUpperCase()}</Text>
                         <View style={styles.verifiedBadge}>
-                            <Text style={styles.verifiedText}>✓ Verified</Text>
+                            <Text style={styles.verifiedText}>VERIFIED</Text>
                         </View>
                     </View>
 
                     <Text style={styles.title}>{prop.title}</Text>
-                    <Text style={styles.location}>📍 {prop.location}</Text>
+                    <Text style={styles.location}>{prop.location.toUpperCase()}</Text>
                     <Text style={styles.price}>{prop.price}</Text>
 
                     <View style={styles.divider} />
 
                     {/* Seller Card */}
-                    <Text style={styles.sectionTitle}>Listing Agent</Text>
+                    <Text style={styles.sectionTitle}>LISTING AGENT</Text>
                     <TouchableOpacity
                         style={styles.sellerCard}
                         onPress={() => navigation.navigate('SellerProfile')}
@@ -108,7 +108,7 @@ export default function PropertyDetailsScreen({ route, navigation }: Props) {
                             <Text style={styles.sellerName}>{prop.seller.name}</Text>
                             <Text style={styles.sellerFirm}>{prop.seller.firm}</Text>
                         </View>
-                        <Text style={styles.viewProfile}>View Page ›</Text>
+                        <Text style={styles.viewProfile}>VIEW PAGE</Text>
                     </TouchableOpacity>
 
                     <View style={styles.divider} />
@@ -139,7 +139,7 @@ export default function PropertyDetailsScreen({ route, navigation }: Props) {
             {/* Booking/Contact Footer */}
             <View style={styles.footer}>
                 <TouchableOpacity style={styles.cartBtn}>
-                    <Text style={styles.cartIcon}>❤</Text>
+                    <Text style={styles.cartBtnText}>SAVE</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.contactBtn}
@@ -149,7 +149,7 @@ export default function PropertyDetailsScreen({ route, navigation }: Props) {
                         propertyTitle: prop.title
                     })}
                 >
-                    <Text style={styles.contactBtnText}>Contact Seller</Text>
+                    <Text style={styles.contactBtnTextMain}>CONTACT SELLER</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -175,23 +175,23 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 20,
         left: 20,
-        width: 44,
-        height: 44,
-        borderRadius: 22,
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 4,
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: '#000',
-        shadowOpacity: 0.2,
-        shadowRadius: 5,
-        elevation: 5,
+        borderWidth: 1,
+        borderColor: '#000',
     },
     shareBtn: {
         left: 'auto',
         right: 20,
     },
-    navIcon: {
-        fontSize: 20,
+    navLabel: {
+        fontSize: 10,
+        fontWeight: '900',
+        color: '#000',
     },
     content: {
         padding: 24,
@@ -203,38 +203,41 @@ const styles = StyleSheet.create({
         marginBottom: 12,
     },
     typeLabel: {
-        fontSize: 14,
-        fontWeight: '700',
-        color: '#E76F51',
-        textTransform: 'uppercase',
+        fontSize: 12,
+        fontWeight: '900',
+        color: '#D4AF37',
         letterSpacing: 1,
     },
     verifiedBadge: {
-        backgroundColor: '#E8F5E9',
+        backgroundColor: '#f5f5f5',
         paddingHorizontal: 10,
         paddingVertical: 5,
-        borderRadius: 20,
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: '#000',
     },
     verifiedText: {
-        color: '#2E7D32',
-        fontSize: 12,
-        fontWeight: 'bold',
+        color: '#000',
+        fontSize: 9,
+        fontWeight: '900',
     },
     title: {
         fontSize: 26,
         fontWeight: '900',
-        color: '#1a1a1a',
+        color: '#000',
         marginBottom: 8,
     },
     location: {
-        fontSize: 16,
-        color: '#666',
+        fontSize: 14,
+        color: '#888',
+        fontWeight: '700',
         marginBottom: 12,
+        letterSpacing: 0.5,
     },
     price: {
         fontSize: 24,
         fontWeight: '900',
-        color: '#264653',
+        color: '#000',
         marginBottom: 20,
     },
     divider: {
@@ -245,9 +248,11 @@ const styles = StyleSheet.create({
     sellerCard: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#f8f9fa',
+        backgroundColor: '#fff',
         padding: 15,
-        borderRadius: 20,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#eee',
     },
     sellerAvatar: {
         width: 50,
@@ -260,23 +265,24 @@ const styles = StyleSheet.create({
     },
     sellerName: {
         fontSize: 16,
-        fontWeight: '700',
-        color: '#1a1a1a',
+        fontWeight: '800',
+        color: '#000',
     },
     sellerFirm: {
         fontSize: 13,
         color: '#666',
     },
     viewProfile: {
-        color: '#E76F51',
-        fontWeight: '700',
-        fontSize: 13,
+        color: '#D4AF37',
+        fontWeight: '900',
+        fontSize: 11,
     },
     sectionTitle: {
-        fontSize: 18,
-        fontWeight: '800',
-        color: '#1a1a1a',
-        marginBottom: 12,
+        fontSize: 14,
+        fontWeight: '900',
+        color: '#000',
+        marginBottom: 15,
+        letterSpacing: 1,
     },
     description: {
         fontSize: 15,
@@ -287,60 +293,60 @@ const styles = StyleSheet.create({
     amenitiesGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        gap: 10,
+        gap: 8,
         marginBottom: 20,
     },
     amenityChip: {
-        backgroundColor: '#f0f4f7',
-        paddingHorizontal: 14,
-        paddingVertical: 8,
-        borderRadius: 10,
+        backgroundColor: '#fff',
+        paddingHorizontal: 12,
+        paddingVertical: 6,
+        borderRadius: 2,
+        borderWidth: 1,
+        borderColor: '#eee',
     },
     amenityText: {
-        fontSize: 13,
-        color: '#264653',
-        fontWeight: '600',
+        fontSize: 10,
+        color: '#000',
+        fontWeight: '800',
     },
     footer: {
         position: 'absolute',
         bottom: 0,
         width: '100%',
-        padding: 24,
+        padding: 20,
         backgroundColor: 'white',
         borderTopWidth: 1,
-        borderTopColor: '#f0f0f0',
+        borderTopColor: '#000',
         flexDirection: 'row',
         alignItems: 'center',
     },
     cartBtn: {
-        width: 60,
-        height: 60,
-        borderRadius: 15,
-        borderWidth: 2,
-        borderColor: '#eee',
+        width: 80,
+        height: 50,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#000',
         justifyContent: 'center',
         alignItems: 'center',
-        marginRight: 15,
+        marginRight: 10,
     },
-    cartIcon: {
-        fontSize: 24,
-        color: '#E76F51',
+    cartBtnText: {
+        fontSize: 12,
+        fontWeight: '900',
+        color: '#000',
     },
     contactBtn: {
         flex: 1,
-        height: 60,
-        backgroundColor: '#264653',
-        borderRadius: 15,
+        height: 50,
+        backgroundColor: '#000',
+        borderRadius: 4,
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: '#264653',
-        shadowOpacity: 0.3,
-        shadowRadius: 10,
-        elevation: 8,
     },
-    contactBtnText: {
+    contactBtnTextMain: {
         color: 'white',
-        fontSize: 18,
-        fontWeight: 'bold',
+        fontSize: 14,
+        fontWeight: '900',
+        letterSpacing: 1,
     }
 });

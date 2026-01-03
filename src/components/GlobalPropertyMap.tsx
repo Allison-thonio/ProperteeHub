@@ -1,7 +1,10 @@
 
 import React, { useRef } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Linking, Platform, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Linking, Platform } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types/navigation';
 
 type PropertyLocation = {
     id: string;
@@ -25,12 +28,12 @@ const DEFAULT_REGION = {
 
 export default function GlobalPropertyMap({ properties, height = 250 }: Props) {
     const mapRef = useRef<MapView>(null);
+    const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
     const openGoogleMaps = () => {
-        // Open nearby location search in Google Maps App
         const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
         const latLng = `${DEFAULT_REGION.latitude},${DEFAULT_REGION.longitude}`;
-        const label = 'Properties Near Me';
+        const label = 'Properties';
         const url = Platform.select({
             ios: `${scheme}${label}@${latLng}`,
             android: `${scheme}${latLng}(${label})`
@@ -54,8 +57,7 @@ export default function GlobalPropertyMap({ properties, height = 250 }: Props) {
                     <Marker
                         key={prop.id}
                         coordinate={{ latitude: prop.latitude, longitude: prop.longitude }}
-                        title={prop.title}
-                        description={prop.price}
+                        onPress={() => navigation.navigate('PropertyDetails', { propertyId: prop.id })}
                     >
                         <View style={styles.markerContainer}>
                             <View style={styles.markerBubble}>
@@ -68,7 +70,7 @@ export default function GlobalPropertyMap({ properties, height = 250 }: Props) {
             </MapView>
 
             <TouchableOpacity style={styles.expandButton} onPress={openGoogleMaps}>
-                <Text style={styles.expandText}>Open in Maps ↗</Text>
+                <Text style={styles.expandText}>OPEN IN MAPS</Text>
             </TouchableOpacity>
         </View>
     );
@@ -77,12 +79,12 @@ export default function GlobalPropertyMap({ properties, height = 250 }: Props) {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        borderRadius: 16,
+        borderRadius: 12,
         overflow: 'hidden',
         position: 'relative',
-        marginVertical: 20,
+        marginVertical: 15,
         borderWidth: 1,
-        borderColor: '#eee',
+        borderColor: '#e0e0e0',
     },
     map: {
         ...StyleSheet.absoluteFillObject,
@@ -91,49 +93,53 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     markerBubble: {
-        backgroundColor: '#264653',
+        backgroundColor: '#000',
         paddingHorizontal: 8,
-        paddingVertical: 4,
-        borderRadius: 8,
+        paddingVertical: 5,
+        borderRadius: 4,
         borderWidth: 1,
-        borderColor: 'white',
+        borderColor: '#fff',
     },
     markerText: {
-        color: 'white',
-        fontSize: 12,
-        fontWeight: 'bold',
+        color: '#fff',
+        fontSize: 11,
+        fontWeight: '700',
     },
     markerArrow: {
         width: 0,
         height: 0,
         backgroundColor: 'transparent',
         borderStyle: 'solid',
-        borderLeftWidth: 6,
-        borderRightWidth: 6,
+        borderLeftWidth: 5,
+        borderRightWidth: 5,
         borderBottomWidth: 0,
-        borderTopWidth: 8,
+        borderTopWidth: 6,
         borderLeftColor: 'transparent',
         borderRightColor: 'transparent',
-        borderTopColor: '#264653',
-        marginBottom: -5,
+        borderTopColor: '#000',
+        marginBottom: -3,
     },
     expandButton: {
         position: 'absolute',
-        bottom: 15,
-        right: 15,
-        backgroundColor: 'white',
-        paddingVertical: 8,
+        bottom: 12,
+        right: 12,
+        backgroundColor: '#fff',
+        paddingVertical: 6,
         paddingHorizontal: 12,
-        borderRadius: 20,
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#000',
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
-        shadowRadius: 4,
-        elevation: 3,
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
     },
     expandText: {
-        fontSize: 12,
-        fontWeight: 'bold',
-        color: '#264653',
+        fontSize: 10,
+        fontWeight: '700',
+        color: '#000',
+        letterSpacing: 0.5,
     },
 });
+

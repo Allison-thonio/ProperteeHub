@@ -1,13 +1,20 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    TouchableOpacity,
+    ScrollView
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
 
-type Props = NativeStackScreenProps<RootStackParamList, 'SellerProfile'>;
+type Props = NativeStackScreenProps<RootStackParamList, 'BuyerProfile'>;
 
-export default function SellerProfileScreen({ navigation }: Props) {
+export default function BuyerProfileScreen({ navigation }: Props) {
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -15,7 +22,7 @@ export default function SellerProfileScreen({ navigation }: Props) {
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
                         <Text style={styles.backLabel}>BACK</Text>
                     </TouchableOpacity>
-                    <Text style={styles.headerTitle}>AGENT PROFILE</Text>
+                    <Text style={styles.headerTitle}>MY PROFILE</Text>
                     <TouchableOpacity>
                         <Text style={styles.editLabel}>EDIT</Text>
                     </TouchableOpacity>
@@ -24,44 +31,48 @@ export default function SellerProfileScreen({ navigation }: Props) {
                 <View style={styles.profileSection}>
                     <Image
                         style={styles.profilePic}
-                        source={{ uri: 'https://ui-avatars.com/api/?name=John+Doe&background=000&color=fff' }}
+                        source={{ uri: 'https://ui-avatars.com/api/?name=Alice+Buyer&background=000&color=fff' }}
                     />
-                    <Text style={styles.name}>John Doe</Text>
-                    <Text style={styles.businessName}>PROPERTEE REALTORS LTD</Text>
-                    <View style={styles.badge}>
-                        <Text style={styles.badgeText}>VERIFIED AGENT</Text>
+                    <Text style={styles.name}>Alice Johnson</Text>
+                    <Text style={styles.userRole}>Premium Buyer</Text>
+                    <View style={styles.goldBadge}>
+                        <Text style={styles.goldBadgeText}>GOLD MEMBER</Text>
                     </View>
                 </View>
 
                 <View style={styles.statsContainer}>
                     <View style={styles.statBox}>
-                        <Text style={styles.statValue}>12</Text>
-                        <Text style={styles.statLabel}>LISTINGS</Text>
+                        <Text style={styles.statValue}>5</Text>
+                        <Text style={styles.statLabel}>SAVED</Text>
                     </View>
                     <View style={styles.statBox}>
-                        <Text style={styles.statValue}>4.8</Text>
-                        <Text style={styles.statLabel}>RATING</Text>
+                        <Text style={styles.statValue}>2</Text>
+                        <Text style={styles.statLabel}>TOURS</Text>
                     </View>
                     <View style={styles.statBox}>
-                        <Text style={styles.statValue}>3Y</Text>
-                        <Text style={styles.statLabel}>YEARS</Text>
+                        <Text style={styles.statValue}>8</Text>
+                        <Text style={styles.statLabel}>CHATS</Text>
                     </View>
                 </View>
 
                 <View style={styles.infoSection}>
-                    <Text style={styles.sectionLabel}>CONTACT DETAILS</Text>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>EMAIL</Text>
-                        <Text style={styles.infoValue}>john@propertee.com</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>PHONE</Text>
-                        <Text style={styles.infoValue}>+234 812 345 6789</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                        <Text style={styles.infoLabel}>OFFICE</Text>
-                        <Text style={styles.infoValue}>LEKKI PHASE 1, LAGOS</Text>
-                    </View>
+                    <Text style={styles.sectionLabel}>ACCOUNT SETTINGS</Text>
+                    <TouchableOpacity style={styles.menuItem}>
+                        <Text style={styles.menuText}>PERSONAL INFORMATION</Text>
+                        <Text style={styles.arrowLabel}>›</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem}>
+                        <Text style={styles.menuText}>NOTIFICATIONS</Text>
+                        <Text style={styles.arrowLabel}>›</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem}>
+                        <Text style={styles.menuText}>PRIVACY & SECURITY</Text>
+                        <Text style={styles.arrowLabel}>›</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.menuItem}>
+                        <Text style={styles.menuText}>HELP & SUPPORT</Text>
+                        <Text style={styles.arrowLabel}>›</Text>
+                    </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity
@@ -129,21 +140,20 @@ const styles = StyleSheet.create({
         color: '#000',
         letterSpacing: 0.5,
     },
-    businessName: {
-        fontSize: 12,
+    userRole: {
+        fontSize: 14,
         color: '#888',
         marginTop: 5,
-        fontWeight: '800',
-        letterSpacing: 0.5,
+        fontWeight: '600',
     },
-    badge: {
-        backgroundColor: '#000',
+    goldBadge: {
+        backgroundColor: '#D4AF37',
         paddingHorizontal: 12,
         paddingVertical: 5,
         borderRadius: 2,
         marginTop: 15,
     },
-    badgeText: {
+    goldBadgeText: {
         color: '#fff',
         fontSize: 9,
         fontWeight: '900',
@@ -185,22 +195,24 @@ const styles = StyleSheet.create({
         letterSpacing: 1,
         marginBottom: 20,
     },
-    infoRow: {
+    menuItem: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingVertical: 15,
+        alignItems: 'center',
+        paddingVertical: 18,
         borderBottomWidth: 1,
         borderBottomColor: '#f5f5f5',
     },
-    infoLabel: {
-        fontSize: 10,
-        color: '#888',
-        fontWeight: '800',
-    },
-    infoValue: {
-        fontSize: 11,
-        fontWeight: '900',
+    menuText: {
+        fontSize: 12,
+        fontWeight: '700',
         color: '#000',
+        letterSpacing: 0.5,
+    },
+    arrowLabel: {
+        fontSize: 18,
+        color: '#888',
+        fontWeight: '300',
     },
     logoutButton: {
         marginHorizontal: 20,

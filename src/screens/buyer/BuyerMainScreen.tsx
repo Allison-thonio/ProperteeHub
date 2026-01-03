@@ -93,14 +93,14 @@ export default function BuyerMainScreen({ navigation }: Props) {
                 {/* Header */}
                 <View style={styles.header}>
                     <View>
-                        <Text style={styles.greeting}>Find your dream</Text>
-                        <Text style={styles.title}>Property</Text>
+                        <Text style={styles.greeting}>ProperteeHub</Text>
+                        <Text style={styles.title}>Explore</Text>
                     </View>
                     <TouchableOpacity
-                        style={styles.profileBtn}
+                        style={styles.messageBtn}
                         onPress={() => navigation.navigate('ChatList')}
                     >
-                        <Text style={{ fontSize: 22 }}>💬</Text>
+                        <Text style={styles.btnText}>MESSAGES</Text>
                         <View style={styles.unreadDot} />
                     </TouchableOpacity>
                 </View>
@@ -108,16 +108,16 @@ export default function BuyerMainScreen({ navigation }: Props) {
                 {/* Search Bar */}
                 <View style={styles.searchContainer}>
                     <View style={styles.searchBar}>
-                        <Text style={styles.searchIcon}>🔍</Text>
+                        <Text style={styles.searchLabel}>SEARCH</Text>
                         <TextInput
-                            placeholder="Search location, title..."
+                            placeholder="Location, price, type..."
                             style={styles.searchInput}
                             value={searchQuery}
                             onChangeText={setSearchQuery}
                         />
                     </View>
                     <TouchableOpacity style={styles.filterBtn}>
-                        <Text style={styles.filterIcon}>⚙️</Text>
+                        <Text style={styles.filterBtnText}>FILTER</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -135,7 +135,7 @@ export default function BuyerMainScreen({ navigation }: Props) {
                             onPress={() => setActiveCategory(cat)}
                         >
                             <Text style={[styles.categoryText, activeCategory === cat && styles.categoryTextActive]}>
-                                {cat}
+                                {cat.toUpperCase()}
                             </Text>
                         </TouchableOpacity>
                     ))}
@@ -143,7 +143,7 @@ export default function BuyerMainScreen({ navigation }: Props) {
 
                 {/* Home Map */}
                 <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Explore on Map</Text>
+                    <Text style={styles.sectionTitle}>MAP VIEW</Text>
                 </View>
                 <View style={{ paddingHorizontal: 20 }}>
                     <GlobalPropertyMap properties={mapProperties} height={180} />
@@ -151,9 +151,9 @@ export default function BuyerMainScreen({ navigation }: Props) {
 
                 {/* Popular Listings */}
                 <View style={styles.sectionHeader}>
-                    <Text style={styles.sectionTitle}>Recommended for you</Text>
+                    <Text style={styles.sectionTitle}>RECOMMENDED</Text>
                     <TouchableOpacity>
-                        <Text style={styles.seeAll}>See All</Text>
+                        <Text style={styles.seeAll}>SEE ALL</Text>
                     </TouchableOpacity>
                 </View>
 
@@ -174,11 +174,11 @@ export default function BuyerMainScreen({ navigation }: Props) {
                                 <Text style={styles.priceBadgeText}>{item.price}</Text>
                             </View>
                             <Text style={styles.propTitle} numberOfLines={1}>{item.title}</Text>
-                            <Text style={styles.propLocation}>📍 {item.location}</Text>
+                            <Text style={styles.propLocation}>{item.location.toUpperCase()}</Text>
                         </TouchableOpacity>
                     )) : (
                         <View style={{ width: width - 40, height: 100, justifyContent: 'center', alignItems: 'center' }}>
-                            <Text style={{ color: '#888' }}>No properties found matching your search.</Text>
+                            <Text style={{ color: '#888' }}>No matches found</Text>
                         </View>
                     )}
                 </ScrollView>
@@ -188,10 +188,15 @@ export default function BuyerMainScreen({ navigation }: Props) {
 
             {/* Basic Bottom Nav Mock */}
             <View style={styles.bottomNav}>
-                <TouchableOpacity style={styles.navItem}><Text style={styles.navIcon}>🏠</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.navItem}><Text style={styles.navIcon}>🔍</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.navItem}><Text style={styles.navIcon}>❤</Text></TouchableOpacity>
-                <TouchableOpacity style={styles.navItem}><Text style={styles.navIcon}>👤</Text></TouchableOpacity>
+                <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('BuyerMain')}>
+                    <Text style={styles.navLabelActive}>HOME</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('SavedProperties')}>
+                    <Text style={styles.navLabel}>SAVED</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.navItem} onPress={() => navigation.navigate('BuyerProfile')}>
+                    <Text style={styles.navLabel}>PROFILE</Text>
+                </TouchableOpacity>
             </View>
         </SafeAreaView>
     );
@@ -210,92 +215,103 @@ const styles = StyleSheet.create({
         paddingTop: 15,
     },
     greeting: {
-        fontSize: 18,
-        color: '#666',
+        fontSize: 14,
+        fontWeight: '700',
+        color: '#D4AF37',
+        letterSpacing: 1,
     },
     title: {
         fontSize: 28,
-        fontWeight: '800',
-        color: '#1a1a1a',
+        fontWeight: '900',
+        color: '#000',
     },
-    profileBtn: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
-        backgroundColor: '#f8f9fa',
+    messageBtn: {
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+        borderRadius: 4,
+        backgroundColor: '#000',
         justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
-        borderColor: '#eee',
+    },
+    btnText: {
+        color: '#fff',
+        fontSize: 10,
+        fontWeight: '800',
     },
     unreadDot: {
         position: 'absolute',
-        top: 12,
-        right: 12,
-        width: 10,
-        height: 10,
-        borderRadius: 5,
-        backgroundColor: '#E76F51',
-        borderWidth: 2,
+        top: -2,
+        right: -2,
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        backgroundColor: '#D4AF37',
+        borderWidth: 1,
         borderColor: '#fff',
     },
     searchContainer: {
         flexDirection: 'row',
         paddingHorizontal: 20,
         marginTop: 25,
-        gap: 12,
+        gap: 10,
     },
     searchBar: {
         flex: 1,
         flexDirection: 'row',
-        backgroundColor: '#f8f9fa',
-        borderRadius: 16,
-        paddingHorizontal: 15,
+        backgroundColor: '#fff',
+        borderRadius: 4,
+        paddingHorizontal: 12,
         alignItems: 'center',
         borderWidth: 1,
-        borderColor: '#eee',
+        borderColor: '#000',
     },
-    searchIcon: {
-        fontSize: 18,
+    searchLabel: {
+        fontSize: 10,
+        fontWeight: '800',
+        color: '#000',
         marginRight: 10,
     },
     searchInput: {
         flex: 1,
-        height: 55,
-        fontSize: 16,
+        height: 45,
+        fontSize: 14,
+        color: '#000',
     },
     filterBtn: {
-        width: 55,
-        height: 55,
-        backgroundColor: '#264653',
-        borderRadius: 16,
+        width: 45,
+        height: 45,
+        backgroundColor: '#fff',
+        borderRadius: 4,
+        borderWidth: 1,
+        borderColor: '#000',
         justifyContent: 'center',
         alignItems: 'center',
     },
-    filterIcon: {
-        fontSize: 20,
-        color: 'white',
+    filterBtnText: {
+        fontSize: 9,
+        fontWeight: '900',
+        color: '#000',
     },
     categoriesScroll: {
         marginTop: 20,
         marginBottom: 10,
     },
     categoryChip: {
-        paddingHorizontal: 22,
-        paddingVertical: 12,
-        borderRadius: 30,
-        backgroundColor: '#fafafa',
-        marginRight: 12,
+        paddingHorizontal: 15,
+        paddingVertical: 8,
+        borderRadius: 4,
+        backgroundColor: '#fff',
+        marginRight: 10,
         borderWidth: 1,
-        borderColor: '#f0f0f0',
+        borderColor: '#eee',
     },
     categoryChipActive: {
-        backgroundColor: '#E76F51',
-        borderColor: '#E76F51',
+        backgroundColor: '#000',
+        borderColor: '#000',
     },
     categoryText: {
-        fontSize: 14,
-        fontWeight: '600',
+        fontSize: 10,
+        fontWeight: '800',
         color: '#888',
     },
     categoryTextActive: {
@@ -310,76 +326,83 @@ const styles = StyleSheet.create({
         marginBottom: 15,
     },
     sectionTitle: {
-        fontSize: 20,
-        fontWeight: '800',
-        color: '#1a1a1a',
+        fontSize: 14,
+        fontWeight: '900',
+        color: '#000',
+        letterSpacing: 1,
     },
     seeAll: {
-        color: '#E76F51',
-        fontWeight: '600',
+        color: '#D4AF37',
+        fontWeight: '700',
+        fontSize: 12,
     },
     propertyScroll: {
         paddingBottom: 20,
     },
     propertyCard: {
         width: 250,
-        marginRight: 20,
+        marginRight: 15,
         backgroundColor: 'white',
-        borderRadius: 24,
+        borderRadius: 4,
         overflow: 'hidden',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.05,
-        shadowRadius: 15,
-        elevation: 4,
+        borderWidth: 1,
+        borderColor: '#eee',
     },
     propertyImg: {
         width: '100%',
-        height: 180,
-        backgroundColor: '#eee',
+        height: 160,
+        backgroundColor: '#f5f5f5',
     },
     priceBadge: {
         position: 'absolute',
-        top: 15,
-        left: 15,
-        backgroundColor: 'rgba(255,255,255, 0.95)',
-        paddingHorizontal: 12,
-        paddingVertical: 6,
-        borderRadius: 10,
+        top: 10,
+        left: 10,
+        backgroundColor: '#D4AF37',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 2,
     },
     priceBadgeText: {
-        fontWeight: '800',
-        fontSize: 14,
-        color: '#264653',
+        fontWeight: '900',
+        fontSize: 12,
+        color: '#fff',
     },
     propTitle: {
-        fontSize: 18,
-        fontWeight: '700',
-        color: '#1a1a1a',
-        paddingHorizontal: 15,
-        marginTop: 12,
+        fontSize: 16,
+        fontWeight: '800',
+        color: '#000',
+        paddingHorizontal: 12,
+        marginTop: 10,
     },
     propLocation: {
-        fontSize: 13,
-        color: '#888',
-        paddingHorizontal: 15,
-        paddingBottom: 20,
+        fontSize: 11,
+        color: '#666',
+        fontWeight: '600',
+        paddingHorizontal: 12,
+        paddingBottom: 15,
         marginTop: 4,
     },
     bottomNav: {
         flexDirection: 'row',
-        height: 70,
+        height: 60,
         backgroundColor: 'white',
         borderTopWidth: 1,
-        borderTopColor: '#f0f0f0',
+        borderTopColor: '#000',
         justifyContent: 'space-around',
         alignItems: 'center',
-        paddingBottom: 10,
     },
     navItem: {
-        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    navIcon: {
-        fontSize: 22,
-    }
+    navLabel: {
+        fontSize: 10,
+        fontWeight: '700',
+        color: '#888',
+    },
+    navLabelActive: {
+        fontSize: 10,
+        fontWeight: '900',
+        color: '#000',
+    },
 });
