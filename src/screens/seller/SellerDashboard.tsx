@@ -71,28 +71,48 @@ export default function SellerDashboard({ navigation }: Props) {
                     <Text style={styles.greeting}>Hello, John 👋</Text>
                     <Text style={styles.subtitle}>Propertee Realtors Ltd</Text>
                 </View>
-                <Image
-                    style={styles.profilePic}
-                    source={{ uri: 'https://ui-avatars.com/api/?name=John+Doe&background=264653&color=fff' }}
-                />
+                <View style={styles.headerRight}>
+                    <TouchableOpacity
+                        style={styles.messageBtn}
+                        onPress={() => navigation.navigate('ChatList')}
+                    >
+                        <Text style={{ fontSize: 20 }}>💬</Text>
+                        <View style={styles.badgeDot} />
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('SellerProfile')}>
+                        <Image
+                            style={styles.profilePic}
+                            source={{ uri: 'https://ui-avatars.com/api/?name=John+Doe&background=264653&color=fff' }}
+                        />
+                    </TouchableOpacity>
+                </View>
             </View>
 
             {/* Stats Card */}
             <View style={styles.statsCard}>
-                <View style={styles.statItem}>
+                <TouchableOpacity
+                    style={styles.statItem}
+                    onPress={() => navigation.navigate('ListingsManagement', { filter: 'active' })}
+                >
                     <Text style={styles.statNumber}>12</Text>
                     <Text style={styles.statLabel}>Active listings</Text>
-                </View>
+                </TouchableOpacity>
                 <View style={styles.divider} />
-                <View style={styles.statItem}>
+                <TouchableOpacity
+                    style={styles.statItem}
+                    onPress={() => navigation.navigate('ListingsManagement', { filter: 'views' })}
+                >
                     <Text style={styles.statNumber}>45</Text>
                     <Text style={styles.statLabel}>Views (Today)</Text>
-                </View>
+                </TouchableOpacity>
                 <View style={styles.divider} />
-                <View style={styles.statItem}>
+                <TouchableOpacity
+                    style={styles.statItem}
+                    onPress={() => navigation.navigate('InquiriesList')}
+                >
                     <Text style={styles.statNumber}>3</Text>
                     <Text style={styles.statLabel}>Inquiries</Text>
-                </View>
+                </TouchableOpacity>
             </View>
 
             <View style={styles.sectionHeader}>
@@ -106,14 +126,18 @@ export default function SellerDashboard({ navigation }: Props) {
 
             <View style={styles.sectionHeader}>
                 <Text style={styles.sectionTitle}>My Properties</Text>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => navigation.navigate('ListingsManagement', {})}>
                     <Text style={styles.seeAll}>See All</Text>
                 </TouchableOpacity>
             </View>
 
             <ScrollView contentContainerStyle={styles.listContainer}>
                 {MOCK_PROPERTIES.map(item => (
-                    <TouchableOpacity key={item.id} style={styles.propertyCard}>
+                    <TouchableOpacity
+                        key={item.id}
+                        style={styles.propertyCard}
+                        onPress={() => navigation.navigate('PropertyDetails', { propertyId: item.id })}
+                    >
                         <View style={styles.cardImagePlaceholder} />
                         <View style={styles.cardContent}>
                             <View style={styles.cardTop}>
@@ -167,6 +191,34 @@ const styles = StyleSheet.create({
         height: 48,
         borderRadius: 24,
         backgroundColor: '#eee',
+        marginLeft: 15,
+    },
+    headerRight: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    messageBtn: {
+        padding: 8,
+        backgroundColor: '#fff',
+        borderRadius: 20,
+        marginRight: 5,
+        elevation: 2,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        position: 'relative',
+    },
+    badgeDot: {
+        position: 'absolute',
+        top: 5,
+        right: 5,
+        width: 10,
+        height: 10,
+        borderRadius: 5,
+        backgroundColor: '#E76F51',
+        borderWidth: 1.5,
+        borderColor: '#fff',
     },
     statsCard: {
         flexDirection: 'row',

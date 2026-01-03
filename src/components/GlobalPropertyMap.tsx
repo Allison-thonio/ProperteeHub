@@ -1,7 +1,7 @@
 
 import React, { useRef } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Linking, Platform, Dimensions } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 
 type PropertyLocation = {
     id: string;
@@ -45,7 +45,6 @@ export default function GlobalPropertyMap({ properties, height = 250 }: Props) {
         <View style={[styles.container, { height }]}>
             <MapView
                 ref={mapRef}
-                provider={PROVIDER_GOOGLE}
                 style={styles.map}
                 initialRegion={DEFAULT_REGION}
                 showsUserLocation={true}

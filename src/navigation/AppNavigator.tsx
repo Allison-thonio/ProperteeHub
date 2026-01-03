@@ -7,6 +7,12 @@ import RoleSelectionScreen from '../screens/RoleSelectionScreen';
 import SellerRegistrationScreen from '../screens/auth/SellerRegistrationScreen';
 import SellerDashboard from '../screens/seller/SellerDashboard';
 import AddPropertyScreen from '../screens/seller/AddPropertyScreen';
+import ChatListScreen from '../screens/messages/ChatListScreen';
+import ChatScreen from '../screens/messages/ChatScreen';
+import SellerProfileScreen from '../screens/seller/SellerProfileScreen';
+import PropertyDetailsScreen from '../screens/seller/PropertyDetailsScreen';
+import ListingsManagementScreen from '../screens/seller/ListingsManagementScreen';
+import InquiriesListScreen from '../screens/seller/InquiriesListScreen';
 
 // Types
 import { RootStackParamList } from '../types/navigation';
@@ -42,6 +48,36 @@ export default function AppNavigator() {
                 name="AddProperty"
                 component={AddPropertyScreen}
                 options={{ title: 'List Property' }}
+            />
+            <Stack.Screen
+                name="ChatList"
+                component={ChatListScreen}
+                options={{ title: 'Messages' }}
+            />
+            <Stack.Screen
+                name="ChatScreen"
+                component={ChatScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="SellerProfile"
+                component={SellerProfileScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="PropertyDetails"
+                component={PropertyDetailsScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="ListingsManagement"
+                component={ListingsManagementScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="InquiriesList"
+                component={InquiriesListScreen}
+                options={{ headerShown: false }}
             />
         </Stack.Navigator>
     );
