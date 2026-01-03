@@ -1,97 +1,155 @@
 
 import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    ScrollView,
+    TouchableOpacity,
+    Dimensions,
+    Share
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../types/navigation';
+import GlobalPropertyMap from '../../components/GlobalPropertyMap';
 
 type Props = NativeStackScreenProps<RootStackParamList, 'PropertyDetails'>;
 
 const { width } = Dimensions.get('window');
 
-// Mock detailed data
+// Enhanced Mock Data for Buyers
 const PROPERTY_DATA = {
     '1': {
-        title: 'Luxury 4 Bedroom Duplex',
+        id: '1',
+        title: 'Modern 4-Bedroom Villa',
         price: '₦120,000,000',
         location: 'Lekki Phase 1, Lagos',
         type: 'House',
-        status: 'Pending Verification',
-        description: 'Beautifully designed 4 bedroom duplex with modern amenities. Located in a secured estate with 24/7 power supply and industrial water treatment plant.',
-        amenities: ['24/7 Power', 'Swimming Pool', 'CCTV', 'Modern Kitchen', 'Secured Estate'],
-        documents: ['Certificate of Occupancy', 'Survey Plan', 'Deed of Assignment'],
+        description: 'Experience luxury living in this architectural masterpiece. This villa features state-of-the-art finishes, a private cinema, and an infinity pool overlooking the lagoon.',
+        amenities: ['Private Pool', 'Gym', 'Cinema', 'Automatic Gate', 'Secured Estate'],
+        images: ['https://images.unsplash.com/photo-1613490493576-7fde63acd811?q=80&w=2071'],
+        seller: {
+            id: 'seller_1',
+            name: 'John Doe',
+            firm: 'Propertee Realtors Ltd',
+            avatar: 'https://ui-avatars.com/api/?name=John+Doe&background=264653&color=fff'
+        },
+        coordinates: { latitude: 6.45, longitude: 3.45 }
     },
     '2': {
-        title: 'Plot of Land (600sqm)',
+        id: '2',
+        title: 'Premium 600sqm Land',
         price: '₦45,000,000',
         location: 'Sangotedo, Ajah',
         type: 'Land',
-        status: 'Active',
-        description: 'Dry land located in a fast-developing area. Perfect for residential or investment purposes. Good topography and access road.',
-        amenities: ['Dry Land', 'Good Road Access', 'Electric Supply', 'Gate House'],
-        documents: ['Governor Consent', 'Registered Survey'],
+        description: 'High-yield investment opportunity. This plot of land is located in a fast-appreciating zone with ongoing infrastructure development.',
+        amenities: ['Dry Land', 'Perimeter Fencing', 'Electricity', 'Cleared Site'],
+        images: ['https://images.unsplash.com/photo-1500382017468-9049fee74a62?q=80&w=2064'],
+        seller: {
+            id: 'seller_1',
+            name: 'John Doe',
+            firm: 'Propertee Realtors Ltd',
+            avatar: 'https://ui-avatars.com/api/?name=John+Doe&background=264653&color=fff'
+        },
+        coordinates: { latitude: 6.47, longitude: 3.60 }
     }
 };
 
 export default function PropertyDetailsScreen({ route, navigation }: Props) {
     const { propertyId } = route.params;
-    const property = PROPERTY_DATA[propertyId as keyof typeof PROPERTY_DATA] || PROPERTY_DATA['1'];
+    const prop = PROPERTY_DATA[propertyId as keyof typeof PROPERTY_DATA] || PROPERTY_DATA['1'];
+
+    const handleShare = async () => {
+        try {
+            await Share.share({ message: `Check out this property on ProperteeHub: ${prop.title} in ${prop.location}` });
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
         <SafeAreaView style={styles.container} edges={['top']}>
-            <ScrollView>
-                {/* Placeholder for Image Slider */}
-                <View style={styles.imagePlaceholder}>
-                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                        <Text style={styles.backText}>←</Text>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                {/* Gallery */}
+                <View style={styles.galleryContainer}>
+                    <Image source={{ uri: prop.images[0] }} style={styles.mainImage} />
+                    <TouchableOpacity onPress={() => navigation.goBack()} style={styles.iconBtn}>
+                        <Text style={styles.navIcon}>←</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.iconBtn, styles.shareBtn]} onPress={handleShare}>
+                        <Text style={styles.navIcon}>🔗</Text>
                     </TouchableOpacity>
                 </View>
 
                 <View style={styles.content}>
                     <View style={styles.headerRow}>
-                        <View style={[styles.badge, property.status === 'Active' ? styles.badgeActive : styles.badgePending]}>
-                            <Text style={styles.badgeText}>{property.status}</Text>
+                        <Text style={styles.typeLabel}>{prop.type}</Text>
+                        <View style={styles.verifiedBadge}>
+                            <Text style={styles.verifiedText}>✓ Verified</Text>
                         </View>
-                        <Text style={styles.typeText}>{property.type}</Text>
                     </View>
 
-                    <Text style={styles.title}>{property.title}</Text>
-                    <Text style={styles.price}>{property.price}</Text>
-                    <Text style={styles.location}>📍 {property.location}</Text>
+                    <Text style={styles.title}>{prop.title}</Text>
+                    <Text style={styles.location}>📍 {prop.location}</Text>
+                    <Text style={styles.price}>{prop.price}</Text>
 
                     <View style={styles.divider} />
 
-                    <Text style={styles.sectionTitle}>Description</Text>
-                    <Text style={styles.description}>{property.description}</Text>
+                    {/* Seller Card */}
+                    <Text style={styles.sectionTitle}>Listing Agent</Text>
+                    <TouchableOpacity
+                        style={styles.sellerCard}
+                        onPress={() => navigation.navigate('SellerProfile')}
+                    >
+                        <Image source={{ uri: prop.seller.avatar }} style={styles.sellerAvatar} />
+                        <View style={styles.sellerInfo}>
+                            <Text style={styles.sellerName}>{prop.seller.name}</Text>
+                            <Text style={styles.sellerFirm}>{prop.seller.firm}</Text>
+                        </View>
+                        <Text style={styles.viewProfile}>View Page ›</Text>
+                    </TouchableOpacity>
+
+                    <View style={styles.divider} />
+
+                    <Text style={styles.sectionTitle}>Overview</Text>
+                    <Text style={styles.description}>{prop.description}</Text>
 
                     <Text style={styles.sectionTitle}>Amenities</Text>
-                    <View style={styles.amenitiesContainer}>
-                        {property.amenities.map((item, index) => (
-                            <View key={index} style={styles.amenityItem}>
-                                <Text style={styles.amenityText}>✓ {item}</Text>
+                    <View style={styles.amenitiesGrid}>
+                        {prop.amenities.map((item, index) => (
+                            <View key={index} style={styles.amenityChip}>
+                                <Text style={styles.amenityText}>{item}</Text>
                             </View>
                         ))}
                     </View>
 
-                    <View style={styles.docSection}>
-                        <Text style={styles.sectionTitle}>Verification Documents</Text>
-                        {property.documents.map((doc, index) => (
-                            <View key={index} style={styles.docItem}>
-                                <Text style={styles.docIcon}>📄</Text>
-                                <Text style={styles.docName}>{doc}</Text>
-                                <Text style={styles.docStatus}>Verified</Text>
-                            </View>
-                        ))}
-                    </View>
+                    {/* Location Map */}
+                    <Text style={styles.sectionTitle}>Location on Map</Text>
+                    <GlobalPropertyMap
+                        properties={[{ id: prop.id, title: prop.title, latitude: prop.coordinates.latitude, longitude: prop.coordinates.longitude, price: prop.price }]}
+                        height={200}
+                    />
+
+                    <View style={{ height: 100 }} />
                 </View>
             </ScrollView>
 
-            <View style={styles.bottomBar}>
-                <TouchableOpacity style={styles.editButton}>
-                    <Text style={styles.editButtonText}>Edit Listing</Text>
+            {/* Booking/Contact Footer */}
+            <View style={styles.footer}>
+                <TouchableOpacity style={styles.cartBtn}>
+                    <Text style={styles.cartIcon}>❤</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.deleteButton}>
-                    <Text style={styles.deleteButtonText}>Deactivate</Text>
+                <TouchableOpacity
+                    style={styles.contactBtn}
+                    onPress={() => navigation.navigate('ChatScreen', {
+                        userId: prop.seller.id,
+                        userName: prop.seller.name,
+                        propertyTitle: prop.title
+                    })}
+                >
+                    <Text style={styles.contactBtnText}>Contact Seller</Text>
                 </TouchableOpacity>
             </View>
         </SafeAreaView>
@@ -103,167 +161,186 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-    imagePlaceholder: {
-        width: width,
-        height: 250,
-        backgroundColor: '#eaeaea',
+    galleryContainer: {
+        height: 300,
+        width: '100%',
         position: 'relative',
     },
-    backButton: {
+    mainImage: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#eee',
+    },
+    iconBtn: {
         position: 'absolute',
         top: 20,
         left: 20,
-        width: 40,
-        height: 40,
-        borderRadius: 20,
-        backgroundColor: 'rgba(255,255,255,0.8)',
+        width: 44,
+        height: 44,
+        borderRadius: 22,
+        backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOpacity: 0.2,
+        shadowRadius: 5,
+        elevation: 5,
     },
-    backText: {
-        fontSize: 24,
-        fontWeight: 'bold',
+    shareBtn: {
+        left: 'auto',
+        right: 20,
+    },
+    navIcon: {
+        fontSize: 20,
     },
     content: {
-        padding: 20,
+        padding: 24,
     },
     headerRow: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 10,
+        marginBottom: 12,
     },
-    badge: {
-        paddingHorizontal: 10,
-        paddingVertical: 4,
-        borderRadius: 6,
-        marginRight: 10,
+    typeLabel: {
+        fontSize: 14,
+        fontWeight: '700',
+        color: '#E76F51',
+        textTransform: 'uppercase',
+        letterSpacing: 1,
     },
-    badgeActive: {
+    verifiedBadge: {
         backgroundColor: '#E8F5E9',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 20,
     },
-    badgePending: {
-        backgroundColor: '#FFF4E5',
-    },
-    badgeText: {
+    verifiedText: {
+        color: '#2E7D32',
         fontSize: 12,
         fontWeight: 'bold',
-        color: '#333',
-    },
-    typeText: {
-        color: '#666',
-        fontWeight: '600',
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
+        fontSize: 26,
+        fontWeight: '900',
         color: '#1a1a1a',
         marginBottom: 8,
-    },
-    price: {
-        fontSize: 22,
-        fontWeight: '800',
-        color: '#264653',
-        marginBottom: 10,
     },
     location: {
         fontSize: 16,
         color: '#666',
+        marginBottom: 12,
+    },
+    price: {
+        fontSize: 24,
+        fontWeight: '900',
+        color: '#264653',
         marginBottom: 20,
     },
     divider: {
         height: 1,
         backgroundColor: '#f0f0f0',
-        marginBottom: 20,
+        marginVertical: 20,
+    },
+    sellerCard: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#f8f9fa',
+        padding: 15,
+        borderRadius: 20,
+    },
+    sellerAvatar: {
+        width: 50,
+        height: 50,
+        borderRadius: 25,
+    },
+    sellerInfo: {
+        flex: 1,
+        marginLeft: 12,
+    },
+    sellerName: {
+        fontSize: 16,
+        fontWeight: '700',
+        color: '#1a1a1a',
+    },
+    sellerFirm: {
+        fontSize: 13,
+        color: '#666',
+    },
+    viewProfile: {
+        color: '#E76F51',
+        fontWeight: '700',
+        fontSize: 13,
     },
     sectionTitle: {
         fontSize: 18,
-        fontWeight: '700',
-        color: '#333',
+        fontWeight: '800',
+        color: '#1a1a1a',
         marginBottom: 12,
     },
     description: {
         fontSize: 15,
-        color: '#555',
-        lineHeight: 22,
-        marginBottom: 24,
+        color: '#444',
+        lineHeight: 24,
+        marginBottom: 20,
     },
-    amenitiesContainer: {
+    amenitiesGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        marginBottom: 24,
+        gap: 10,
+        marginBottom: 20,
     },
-    amenityItem: {
-        width: '50%',
-        marginBottom: 10,
+    amenityChip: {
+        backgroundColor: '#f0f4f7',
+        paddingHorizontal: 14,
+        paddingVertical: 8,
+        borderRadius: 10,
     },
     amenityText: {
-        fontSize: 14,
-        color: '#444',
-    },
-    docSection: {
-        backgroundColor: '#f9f9f9',
-        padding: 16,
-        borderRadius: 12,
-        marginBottom: 100,
-    },
-    docItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-        padding: 12,
-        borderRadius: 8,
-        marginBottom: 8,
-        borderWidth: 1,
-        borderColor: '#eee',
-    },
-    docIcon: {
-        fontSize: 18,
-        marginRight: 10,
-    },
-    docName: {
-        flex: 1,
-        fontSize: 14,
+        fontSize: 13,
+        color: '#264653',
         fontWeight: '600',
-        color: '#333',
     },
-    docStatus: {
-        fontSize: 12,
-        color: '#2A9D8F',
-        fontWeight: 'bold',
-    },
-    bottomBar: {
+    footer: {
         position: 'absolute',
         bottom: 0,
         width: '100%',
-        flexDirection: 'row',
-        padding: 20,
-        backgroundColor: '#fff',
+        padding: 24,
+        backgroundColor: 'white',
         borderTopWidth: 1,
         borderTopColor: '#f0f0f0',
-    },
-    editButton: {
-        flex: 2,
-        backgroundColor: '#264653',
-        padding: 16,
-        borderRadius: 12,
+        flexDirection: 'row',
         alignItems: 'center',
-        marginRight: 10,
     },
-    editButtonText: {
-        color: '#fff',
-        fontWeight: 'bold',
+    cartBtn: {
+        width: 60,
+        height: 60,
+        borderRadius: 15,
+        borderWidth: 2,
+        borderColor: '#eee',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 15,
     },
-    deleteButton: {
+    cartIcon: {
+        fontSize: 24,
+        color: '#E76F51',
+    },
+    contactBtn: {
         flex: 1,
-        backgroundColor: '#fee',
-        padding: 16,
-        borderRadius: 12,
+        height: 60,
+        backgroundColor: '#264653',
+        borderRadius: 15,
+        justifyContent: 'center',
         alignItems: 'center',
-        borderWidth: 1,
-        borderColor: '#ff4d4d',
+        shadowColor: '#264653',
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
+        elevation: 8,
     },
-    deleteButtonText: {
-        color: '#ff4d4d',
+    contactBtnText: {
+        color: 'white',
+        fontSize: 18,
         fontWeight: 'bold',
-    },
+    }
 });

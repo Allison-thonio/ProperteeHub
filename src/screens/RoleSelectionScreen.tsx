@@ -27,7 +27,10 @@ export default function RoleSelectionScreen({ navigation }: Props) {
                     <Text style={styles.cardDescription}>List properties for sale, rent, or shortlet.</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.card}>
+                <TouchableOpacity
+                    style={styles.card}
+                    onPress={() => navigation.navigate('BuyerRegister')}
+                >
                     <Text style={styles.cardTitle}>I am a Buyer / Renter</Text>
                     <Text style={styles.cardDescription}>Find your dream home or next investment.</Text>
                 </TouchableOpacity>

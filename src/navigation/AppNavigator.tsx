@@ -13,6 +13,8 @@ import SellerProfileScreen from '../screens/seller/SellerProfileScreen';
 import PropertyDetailsScreen from '../screens/seller/PropertyDetailsScreen';
 import ListingsManagementScreen from '../screens/seller/ListingsManagementScreen';
 import InquiriesListScreen from '../screens/seller/InquiriesListScreen';
+import BuyerRegistrationScreen from '../screens/buyer/BuyerRegistrationScreen';
+import BuyerMainScreen from '../screens/buyer/BuyerMainScreen';
 
 // Types
 import { RootStackParamList } from '../types/navigation';
@@ -77,6 +79,16 @@ export default function AppNavigator() {
             <Stack.Screen
                 name="InquiriesList"
                 component={InquiriesListScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name="BuyerRegister"
+                component={BuyerRegistrationScreen}
+                options={{ title: 'Buyer Sign Up' }}
+            />
+            <Stack.Screen
+                name="BuyerMain"
+                component={BuyerMainScreen}
                 options={{ headerShown: false }}
             />
         </Stack.Navigator>

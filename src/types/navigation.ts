@@ -14,4 +14,6 @@ export type RootStackParamList = {
     SellerProfile: undefined;
     ListingsManagement: { filter?: 'active' | 'views' };
     InquiriesList: undefined;
+    BuyerProfile: undefined;
+    SavedProperties: undefined;
 };
