@@ -16,4 +16,5 @@ export type RootStackParamList = {
     InquiriesList: undefined;
     BuyerProfile: undefined;
     SavedProperties: undefined;
+    Onboarding: undefined;
 };

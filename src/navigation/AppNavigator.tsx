@@ -3,6 +3,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 // Screens
+import OnboardingScreen from '../screens/OnboardingScreen';
 import RoleSelectionScreen from '../screens/RoleSelectionScreen';
 import SellerRegistrationScreen from '../screens/auth/SellerRegistrationScreen';
 import SellerDashboard from '../screens/seller/SellerDashboard';
@@ -26,13 +27,18 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function AppNavigator() {
     return (
         <Stack.Navigator
-            initialRouteName="RoleSelection"
+            initialRouteName="Onboarding"
             screenOptions={{
                 headerShown: true,
                 headerBackTitle: '',
                 headerTintColor: '#1a1a1a',
             }}
         >
+            <Stack.Screen
+                name="Onboarding"
+                component={OnboardingScreen}
+                options={{ headerShown: false }}
+            />
             <Stack.Screen
                 name="RoleSelection"
                 component={RoleSelectionScreen}
