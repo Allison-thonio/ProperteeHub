@@ -14,6 +14,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
+import { useTheme } from '../context/ThemeContext';
+import { StatusBar } from 'expo-status-bar';
 
 const { width, height } = Dimensions.get('window');
 
@@ -47,6 +49,7 @@ const ONBOARDING_DATA = [
 type Props = NativeStackScreenProps<RootStackParamList, 'Onboarding'>;
 
 export default function OnboardingScreen({ navigation }: Props) {
+    const { colors, theme, isDark } = useTheme();
     const [currentIndex, setCurrentIndex] = useState(0);
     const flatListRef = useRef<FlatList>(null);
 
@@ -69,9 +72,10 @@ export default function OnboardingScreen({ navigation }: Props) {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar style={isDark ? 'light' : 'dark'} />
             <TouchableOpacity style={styles.skipBtn} onPress={skip}>
-                <Text style={styles.skipText}>SKIP</Text>
+                <Text style={[styles.skipText, { color: colors.textSecondary }]}>SKIP</Text>
             </TouchableOpacity>
 
             <FlatList
@@ -86,8 +90,8 @@ export default function OnboardingScreen({ navigation }: Props) {
                     <View style={styles.slide}>
                         <Image source={item.image} style={styles.image} resizeMode="contain" />
                         <View style={styles.textContainer}>
-                            <Text style={styles.title}>{item.title}</Text>
-                            <Text style={styles.description}>{item.description}</Text>
+                            <Text style={[styles.title, { color: colors.text }]}>{item.title}</Text>
+                            <Text style={[styles.description, { color: colors.textSecondary }]}>{item.description}</Text>
                         </View>
                     </View>
                 )}
@@ -100,14 +104,18 @@ export default function OnboardingScreen({ navigation }: Props) {
                             key={index}
                             style={[
                                 styles.indicator,
-                                currentIndex === index ? styles.indicatorActive : styles.indicatorInactive
+                                { backgroundColor: currentIndex === index ? colors.primary : colors.border },
+                                currentIndex === index && styles.indicatorActive
                             ]}
                         />
                     ))}
                 </View>
 
-                <TouchableOpacity style={styles.nextBtn} onPress={goToNext}>
-                    <Text style={styles.nextBtnText}>
+                <TouchableOpacity
+                    style={[styles.nextBtn, { backgroundColor: colors.text }]}
+                    onPress={goToNext}
+                >
+                    <Text style={[styles.nextBtnText, { color: colors.background }]}>
                         {currentIndex === ONBOARDING_DATA.length - 1 ? 'GET STARTED' : 'NEXT'}
                     </Text>
                 </TouchableOpacity>

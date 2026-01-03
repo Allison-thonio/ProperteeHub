@@ -4,55 +4,71 @@ import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../types/navigation';
 import { StatusBar } from 'expo-status-bar';
+import { useTheme } from '../context/ThemeContext';
 
 type Props = {
     navigation: NativeStackNavigationProp<RootStackParamList, 'RoleSelection'>;
 };
 
 export default function RoleSelectionScreen({ navigation }: Props) {
+    const { colors, toggleTheme, isDark } = useTheme();
+
     return (
-        <View style={styles.container}>
-            <StatusBar style="dark" />
+        <View style={[styles.container, { backgroundColor: colors.background }]}>
+            <StatusBar style={isDark ? "light" : "dark"} />
+
+            <View style={styles.topSection}>
+                <Image
+                    source={require('../../assets/onboarding/Relaxing at home-amico.png')}
+                    style={styles.heroImage}
+                    resizeMode="contain"
+                />
+                <TouchableOpacity style={styles.themeToggle} onPress={toggleTheme}>
+                    <Text style={[styles.themeToggleText, { color: colors.primary }]}>
+                        {isDark ? 'LIGHT MODE' : 'DARK MODE'}
+                    </Text>
+                </TouchableOpacity>
+            </View>
 
             <View style={styles.logoContainer}>
-                <View style={styles.logoCircle}>
-                    <Text style={styles.logoText}>P</Text>
+                <View style={[styles.logoCircle, { backgroundColor: colors.text }]}>
+                    <Text style={[styles.logoText, { color: colors.primary }]}>P</Text>
                 </View>
-                <Text style={styles.brandTitle}>PROPERTEEHUB</Text>
+                <Text style={[styles.brandTitle, { color: colors.text }]}>PROPERTEEHUB</Text>
             </View>
 
             <View style={styles.header}>
-                <Text style={styles.title}>WELCOME</Text>
-                <Text style={styles.subtitle}>SELECT YOUR JOURNEY ON THE PLATFORM</Text>
+                <Text style={[styles.title, { color: colors.text }]}>WELCOME</Text>
+                <Text style={[styles.subtitle, { color: colors.textSecondary }]}>SELECT YOUR JOURNEY ON THE PLATFORM</Text>
             </View>
 
             <View style={styles.content}>
                 <TouchableOpacity
-                    style={styles.roleBtnActive}
+                    style={[styles.roleBtnActive, { backgroundColor: colors.text }]}
                     onPress={() => navigation.navigate('BuyerRegister')}
                 >
-                    <Text style={styles.roleBtnTextActive}>I AM A BUYER</Text>
-                    <Text style={styles.roleBtnSubActive}>FIND THE PERFECT PROPERTY</Text>
+                    <Text style={[styles.roleBtnTextActive, { color: colors.background }]}>I AM A BUYER</Text>
+                    <Text style={[styles.roleBtnSubActive, { color: colors.primary }]}>FIND THE PERFECT PROPERTY</Text>
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    style={styles.roleBtn}
+                    style={[styles.roleBtn, { backgroundColor: colors.card, borderColor: colors.border }]}
                     onPress={() => navigation.navigate('SellerRegister')}
                 >
-                    <Text style={styles.roleBtnText}>I AM A SELLER</Text>
-                    <Text style={styles.roleBtnSub}>LIST YOUR EXCLUSIVE PROPERTIES</Text>
+                    <Text style={[styles.roleBtnText, { color: colors.text }]}>I AM A SELLER</Text>
+                    <Text style={[styles.roleBtnSub, { color: colors.textSecondary }]}>LIST YOUR EXCLUSIVE PROPERTIES</Text>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.roleBtn}>
-                    <Text style={styles.roleBtnText}>I AM AN INVESTOR</Text>
-                    <Text style={styles.roleBtnSub}>EXPLORE HIGH-YIELD OPPORTUNITIES</Text>
+                <TouchableOpacity style={[styles.roleBtn, { backgroundColor: colors.card, borderColor: colors.border }]}>
+                    <Text style={[styles.roleBtnText, { color: colors.text }]}>I AM AN INVESTOR</Text>
+                    <Text style={[styles.roleBtnSub, { color: colors.textSecondary }]}>EXPLORE HIGH-YIELD OPPORTUNITIES</Text>
                 </TouchableOpacity>
             </View>
 
             <View style={styles.footer}>
-                <Text style={styles.footerText}>ALREADY HAVE AN ACCOUNT?</Text>
+                <Text style={[styles.footerText, { color: colors.textSecondary }]}>ALREADY HAVE AN ACCOUNT?</Text>
                 <TouchableOpacity>
-                    <Text style={styles.loginText}> LOG IN</Text>
+                    <Text style={[styles.loginText, { color: colors.primary }]}> LOG IN</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -62,94 +78,104 @@ export default function RoleSelectionScreen({ navigation }: Props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
         paddingHorizontal: 30,
-        paddingTop: 80,
+        paddingTop: 50,
+    },
+    topSection: {
+        width: '100%',
+        height: 180,
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        marginBottom: 20,
+    },
+    heroImage: {
+        width: '100%',
+        height: '100%',
+    },
+    themeToggle: {
+        position: 'absolute',
+        top: 0,
+        right: 0,
+        padding: 5,
+    },
+    themeToggleText: {
+        fontSize: 10,
+        fontWeight: '900',
+        letterSpacing: 1,
     },
     logoContainer: {
         alignItems: 'center',
-        marginBottom: 60,
+        marginBottom: 30,
     },
     logoCircle: {
-        width: 60,
-        height: 60,
-        borderRadius: 30,
-        backgroundColor: '#000',
+        width: 50,
+        height: 50,
+        borderRadius: 25,
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 15,
+        marginBottom: 10,
     },
     logoText: {
-        color: '#D4AF37',
-        fontSize: 30,
+        fontSize: 24,
         fontWeight: '900',
     },
     brandTitle: {
-        fontSize: 14,
+        fontSize: 12,
         fontWeight: '900',
-        letterSpacing: 4,
-        color: '#000',
+        letterSpacing: 3,
     },
     header: {
-        marginBottom: 40,
+        marginBottom: 30,
     },
     title: {
-        fontSize: 24,
+        fontSize: 22,
         fontWeight: '900',
-        color: '#000',
-        letterSpacing: 2,
-        marginBottom: 10,
+        letterSpacing: 1.5,
+        marginBottom: 8,
     },
     subtitle: {
-        fontSize: 10,
-        color: '#888',
+        fontSize: 9,
         fontWeight: '800',
-        letterSpacing: 1,
+        letterSpacing: 0.5,
     },
     content: {
-        gap: 15,
+        gap: 12,
     },
     roleBtn: {
-        backgroundColor: '#fff',
-        padding: 24,
+        padding: 20,
         borderRadius: 4,
         borderWidth: 1,
-        borderColor: '#eee',
     },
     roleBtnActive: {
-        backgroundColor: '#000',
-        padding: 24,
+        padding: 20,
         borderRadius: 4,
     },
     roleBtnText: {
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: '900',
-        color: '#000',
         letterSpacing: 1,
-        marginBottom: 5,
+        marginBottom: 4,
     },
     roleBtnTextActive: {
-        fontSize: 14,
+        fontSize: 13,
         fontWeight: '900',
-        color: '#fff',
         letterSpacing: 1,
-        marginBottom: 5,
+        marginBottom: 4,
     },
     roleBtnSub: {
         fontSize: 9,
-        color: '#888',
         fontWeight: '700',
         letterSpacing: 0.5,
     },
     roleBtnSubActive: {
         fontSize: 9,
-        color: '#D4AF37',
         fontWeight: '700',
         letterSpacing: 0.5,
     },
     footer: {
         marginTop: 'auto',
-        marginBottom: 40,
+        marginBottom: 30,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
@@ -157,13 +183,11 @@ const styles = StyleSheet.create({
     footerText: {
         fontSize: 10,
         fontWeight: '800',
-        color: '#888',
-        letterSpacing: 1,
+        letterSpacing: 0.8,
     },
     loginText: {
         fontSize: 10,
         fontWeight: '900',
-        color: '#D4AF37',
         letterSpacing: 1,
     },
 });
